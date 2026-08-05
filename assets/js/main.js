@@ -1,5 +1,6 @@
 /* =====================================================================
-   AI BASICS — classroom deck interactions (vanilla JS, no dependencies)
+   AI BASICS — classroom deck
+   interactions (vanilla JS, no dependencies)
    ===================================================================== */
 (function () {
   'use strict';
@@ -37,8 +38,8 @@
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
     revEls.forEach(function (el) { revObs.observe(el); });
-    // elements already on screen at load (e.g. bottom of the opening slide)
-    // can sit inside the observer's excluded margin — reveal them directly
+    // elements already on screen at load can sit inside the observer's
+    // excluded margin — reveal them directly
     requestAnimationFrame(function () {
       revEls.forEach(function (el) {
         if (el.getBoundingClientRect().top < window.innerHeight) {
@@ -67,33 +68,10 @@
     $$('.manifesto').forEach(function (m) { wObs.observe(m); });
   }
 
-  /* ---------- Count-up numbers ---------- */
-  function countUp(el) {
-    var target = parseFloat(el.getAttribute('data-count-to'));
-    var suffix = el.getAttribute('data-suffix') || '';
-    var dur = 1100, start = null;
-    if (reduce) { el.textContent = target + suffix; return; }
-    function step(ts) {
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / dur, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  if ('IntersectionObserver' in window) {
-    var cObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); cObs.unobserve(e.target); } });
-    }, { threshold: 0.6 });
-    $$('[data-count-to]').forEach(function (el) { cObs.observe(el); });
-  } else { $$('[data-count-to]').forEach(function (el) { el.textContent = el.getAttribute('data-count-to') + (el.getAttribute('data-suffix') || ''); }); }
-
   /* ---------- Welcome slide: QR code ---------- */
   var qrBox = $('#qrBox');
   if (qrBox && typeof qrcode === 'function') {
-    // Encode the deployed URL. Override by setting data-url on #qrCard
-    // (e.g. <div id="qrCard" data-url="https://your-deploy.vercel.app/">).
+    // Encodes the deployed URL. Override by setting data-url on #qrCard.
     var qrCard = $('#qrCard');
     var qrTarget = (qrCard && qrCard.getAttribute('data-url')) ||
       (location.protocol === 'file:' ? '' : location.origin + location.pathname);
@@ -109,7 +87,6 @@
         qrBox.parentElement.style.display = 'none';
       }
     } else {
-      // file:// preview — QR would point nowhere useful
       if (qrUrlEl) qrUrlEl.textContent = 'QR appears when the site is hosted';
       qrBox.innerHTML = '<div style="width:100%;aspect-ratio:1;display:grid;place-items:center;border:1px dashed #E4E4E4;color:#777;font-family:Inter,Arial,sans-serif;font-size:.8rem;padding:1rem;text-align:center">Deploy to generate the QR code</div>';
     }
@@ -120,7 +97,7 @@
   if (heroVideo) {
     var killVideo = function () { if (heroVideo) { heroVideo.remove(); heroVideo = null; } };
     if (reduce) {
-      killVideo(); // reduced motion: canvas-off treatment
+      killVideo();
     } else {
       var playlist = [];
       try { playlist = JSON.parse(heroVideo.getAttribute('data-playlist') || '[]'); } catch (e) {}
@@ -128,18 +105,18 @@
         killVideo();
       } else {
         var clip = 0, failures = 0;
-        function playClip(i) {
+        var playClip = function (i) {
           if (!heroVideo) return;
           clip = ((i % playlist.length) + playlist.length) % playlist.length;
           heroVideo.src = playlist[clip];
           var p = heroVideo.play && heroVideo.play();
           if (p && p.catch) p.catch(function () { /* autoplay blocked; canvas remains */ });
-        }
+        };
         heroVideo.addEventListener('ended', function () { failures = 0; playClip(clip + 1); });
         heroVideo.addEventListener('error', function () {
           failures++;
-          if (failures >= playlist.length) { killVideo(); }   // every clip failed
-          else { playClip(clip + 1); }                         // skip the bad clip
+          if (failures >= playlist.length) { killVideo(); }
+          else { playClip(clip + 1); }
         });
         playClip(0);
       }
@@ -151,10 +128,10 @@
   if (canvas && !reduce && !isTouch) {
     var ctx = canvas.getContext('2d');
     var W, H, parts = [];
-    function size() {
+    var size = function () {
       W = canvas.width = canvas.offsetWidth * (window.devicePixelRatio > 1 ? 2 : 1);
       H = canvas.height = canvas.offsetHeight * (window.devicePixelRatio > 1 ? 2 : 1);
-    }
+    };
     size(); window.addEventListener('resize', size);
     for (var i = 0; i < 46; i++) {
       parts.push({ x: Math.random() * 1, y: Math.random() * 1, r: Math.random() * 1.6 + 0.4,
@@ -176,193 +153,8 @@
     })();
   } else if (canvas) { canvas.style.display = 'none'; }
 
-  /* ---------- INTERACTIVE: AI/ML/DL rings ---------- */
-  var ringData = {
-    ai:  { tag: 'The whole field', h: 'Artificial Intelligence', p: 'Any technique that lets machines mimic human-like tasks: reasoning, perception, decision-making. Includes rule-based systems that never "learn."' },
-    ml:  { tag: 'A subset of AI', h: 'Machine Learning', p: 'Systems that improve at a task by finding patterns in data, rather than being explicitly programmed with rules. Learns from examples.' },
-    dl:  { tag: 'A subset of ML', h: 'Deep Learning', p: 'Machine learning using many-layered neural networks. Powers image recognition, speech, and modern language models.' },
-    gen: { tag: 'A use of deep learning', h: 'Generative AI', p: 'Deep-learning models that create new content (text, images, code, audio) by predicting what plausibly comes next. ChatGPT lives here.' }
-  };
-  var ringDetail = $('#ringDetail');
-  var rings = $$('.ring');
-  function showRing(key) {
-    rings.forEach(function (r) {
-      var k = r.getAttribute('data-ring');
-      r.classList.toggle('active', k === key);
-      r.classList.toggle('dim', key !== null && k !== key);
-      r.setAttribute('aria-pressed', String(k === key));
-    });
-    if (ringDetail && ringData[key]) {
-      var d = ringData[key];
-      ringDetail.innerHTML = '<span class="tag">' + d.tag + '</span><h3>' + d.h + '</h3><p>' + d.p + '</p>';
-    }
-  }
-  rings.forEach(function (r) {
-    r.setAttribute('tabindex', '0');
-    r.setAttribute('role', 'button');
-    var k = r.getAttribute('data-ring');
-    r.addEventListener('click', function () { showRing(k); });
-    r.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showRing(k); }
-    });
-  });
-
-  /* ---------- INTERACTIVE: neural network ---------- */
-  var nn = $('#nn');
-  if (nn) {
-    var svg = $('svg', nn), status = $('#nnStatus');
-    var layers = [4, 6, 5, 2];
-    var colGap = 180, rowGap = 44, left = 46, r = 13;
-    var coords = [];
-    var ns = 'http://www.w3.org/2000/svg';
-    var vbH = 320, vbW = 640;
-    // build coordinates
-    layers.forEach(function (n, li) {
-      var arr = [], colY = (vbH - (n - 1) * rowGap) / 2;
-      for (var i = 0; i < n; i++) arr.push({ x: left + li * colGap, y: colY + i * rowGap });
-      coords.push(arr);
-    });
-    // edges
-    for (var l = 0; l < coords.length - 1; l++) {
-      coords[l].forEach(function (a) {
-        coords[l + 1].forEach(function (b) {
-          var ln = document.createElementNS(ns, 'line');
-          ln.setAttribute('x1', a.x); ln.setAttribute('y1', a.y);
-          ln.setAttribute('x2', b.x); ln.setAttribute('y2', b.y);
-          ln.setAttribute('class', 'edge'); ln.setAttribute('data-layer', l);
-          svg.appendChild(ln);
-        });
-      });
-    }
-    // nodes + labels
-    var labels = ['Input', 'Hidden', 'Hidden', 'Output'];
-    coords.forEach(function (arr, li) {
-      arr.forEach(function (c) {
-        var cir = document.createElementNS(ns, 'circle');
-        cir.setAttribute('cx', c.x); cir.setAttribute('cy', c.y); cir.setAttribute('r', r);
-        cir.setAttribute('class', 'node'); cir.setAttribute('data-layer', li);
-        svg.appendChild(cir);
-      });
-      var t = document.createElementNS(ns, 'text');
-      t.setAttribute('x', arr[0].x); t.setAttribute('y', vbH - 6);
-      t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'layerlbl');
-      t.textContent = labels[li];
-      svg.appendChild(t);
-    });
-    svg.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH);
-    var lit = -1, running = false;
-    function litLayer(i) {
-      $$('.node', svg).forEach(function (n) { n.classList.toggle('lit', +n.getAttribute('data-layer') === i); });
-      $$('.edge', svg).forEach(function (e) { e.classList.toggle('lit', +e.getAttribute('data-layer') === i); });
-    }
-    function forward() {
-      if (running) return; running = true;
-      var names = ['Signal enters the input layer', 'Hidden layer 1 finds simple patterns',
-        'Hidden layer 2 combines them', 'Output layer makes a prediction'];
-      var i = 0;
-      (function tick() {
-        if (i >= layers.length) {
-          running = false; status.textContent = 'Prediction ready. Press again to rerun';
-          setTimeout(function () { litLayer(-1); }, 700); return;
-        }
-        litLayer(i); status.textContent = names[i]; i++;
-        setTimeout(tick, reduce ? 300 : 850);
-      })();
-    }
-    $('#nnRun').addEventListener('click', forward);
-  }
-
-  /* ---------- INTERACTIVE: next-token predictor ---------- */
-  var predict = $('#predict');
-  if (predict) {
-    var sentEl = $('#predictSentence'), optEl = $('#predictOptions'), hintEl = $('#predictHint');
-    var chain = {
-      start: { words: 'The best way to learn is to', next: 'a' },
-      a: { options: [['practice', 62], ['study', 21], ['sleep', 9], ['banana', 1]], pick: 'practice', next: 'b' },
-      b: { options: [['every', 47], ['a', 28], ['consistently', 19], ['loudly', 2]], pick: 'every', next: 'c' },
-      c: { options: [['day', 71], ['week', 16], ['moment', 10], ['pizza', 1]], pick: 'day', next: null }
-    };
-    var built = 'The best way to learn is to';
-    var state = 'a';
-    function renderOptions() {
-      if (!state || !chain[state]) {
-        optEl.innerHTML = '';
-        hintEl.textContent = 'That is all a language model does: pick the next token, over and over, blindingly fast.';
-        sentEl.innerHTML = built + ' <span class="cursor">▮</span>';
-        return;
-      }
-      var node = chain[state];
-      sentEl.innerHTML = built + ' <span class="cursor">▮</span>';
-      optEl.innerHTML = '';
-      node.options.forEach(function (o) {
-        var b = document.createElement('button');
-        b.className = 'tok';
-        b.innerHTML = '<span class="bar" style="width:' + o[1] + '%"></span>' +
-          '<span class="word">' + o[0] + '</span><span class="pct">' + o[1] + '%</span>';
-        b.addEventListener('click', function () {
-          built += ' ' + o[0];
-          state = node.next;
-          renderOptions();
-        });
-        optEl.appendChild(b);
-      });
-      hintEl.textContent = 'Pick a word. The model assigns every option a probability; a higher bar means more likely.';
-    }
-    $('#predictReset').addEventListener('click', function () {
-      built = 'The best way to learn is to'; state = 'a'; renderOptions();
-    });
-    renderOptions();
-  }
-
-  /* ---------- INTERACTIVE: temperature ---------- */
-  var temp = $('#temp');
-  if (temp) {
-    var tSlider = $('#tempSlider'), tOut = $('#tempReadout'), tVal = $('#tempVal');
-    var samples = [
-      { max: 15, label: '0.0 · Deterministic', text: 'The sky is blue because molecules scatter shorter blue wavelengths of sunlight more than longer red ones.' },
-      { max: 45, label: '0.4 · Focused', text: 'The sky appears blue because tiny air molecules scatter the sun’s blue light in every direction.' },
-      { max: 75, label: '0.8 · Balanced', text: 'Sunlight is a mix of colors, and our restless atmosphere flings the blue portion across the whole dome above us.' },
-      { max: 101, label: '1.2 · Creative', text: 'Picture sunlight shattering against the air like glass, the blue shards scattering farthest, painting the ceiling of the world.' }
-    ];
-    function updTemp() {
-      var v = +tSlider.value;
-      var s = samples.find(function (x) { return v < x.max; }) || samples[samples.length - 1];
-      tOut.textContent = s.text;
-      tVal.textContent = s.label;
-    }
-    tSlider.addEventListener('input', updTemp);
-    updTemp();
-  }
-
-  /* ---------- INTERACTIVE: prompt anatomy ---------- */
-  var pa = $('#promptAnatomy');
-  if (pa) {
-    var colors = { role: '#B3C9CD', context: '#8BA18E', task: '#CFAE70', format: '#ECB748' };
-    $$('.pkey button', pa).forEach(function (btn) {
-      var part = btn.getAttribute('data-target');
-      function set(on) {
-        $$('.ppart[data-part="' + part + '"]', pa).forEach(function (span) {
-          span.classList.toggle('on', on);
-          span.style.background = on ? colors[part] : '';
-        });
-        btn.classList.toggle('active', on);
-      }
-      btn.addEventListener('mouseenter', function () { set(true); });
-      btn.addEventListener('mouseleave', function () { if (!btn.dataset.stick) set(false); });
-      btn.addEventListener('focus', function () { set(true); });
-      btn.addEventListener('blur', function () { if (!btn.dataset.stick) set(false); });
-      btn.addEventListener('click', function () {
-        var stick = btn.dataset.stick === '1';
-        btn.dataset.stick = stick ? '' : '1';
-        set(!stick);
-      });
-    });
-  }
-
   /* ---------- INTERACTIVE: knowledge check quizzes ---------- */
   $$('[data-quiz]').forEach(function (root) {
-    var qEls = $$('.quiz__q', root);
-    // single-question checks: each .opt has data-correct
     $$('.quiz__options', root).forEach(function (group) {
       var answered = false;
       var fb = group.parentElement.querySelector('.quiz__feedback');
@@ -385,73 +177,161 @@
     });
   });
 
-  /* ---------- INTERACTIVE: ML trainer (Section 02 play) ---------- */
-  var trainer = $('#mlTrainer');
-  if (trainer) {
-    var TRAINER = [
-      { q: 'Sort incoming HR emails into “benefits,” “payroll,” or “leave,” trained on thousands of past emails that staff already tagged.',
-        answer: 0, why: 'Labeled examples in, labels predicted out. That’s supervised learning.' },
-      { q: 'Take 2,000 open-ended survey comments and group them into themes nobody defined in advance.',
-        answer: 1, why: 'No labels, just structure discovered in raw data. That’s unsupervised learning.' },
-      { q: 'A building-energy program tries settings, gets rewarded when energy drops and comfort complaints stay low, and improves over thousands of tries.',
-        answer: 2, why: 'Act, get rewarded or penalized, improve. That’s reinforcement learning.' },
-      { q: 'Predict which admitted students will enroll, trained on ten years of records marked “enrolled” or “didn’t.”',
-        answer: 0, why: 'Historical outcomes are the labels, so it’s supervised learning again. Most workplace ML is.' }
-    ];
-    var LABELS = ['Supervised', 'Unsupervised', 'Reinforcement'];
-    var tIdx = 0, tScore = 0, tLocked = false;
-    var tQ = $('#trainQ'), tOpt = $('#trainOptions'), tFb = $('#trainFeedback'),
-        tProg = $('#trainProgress'), tNext = $('#trainNext'), tRes = $('#trainResult');
-    function tRender() {
-      tLocked = false;
-      var S = TRAINER[tIdx];
-      tProg.textContent = 'Scenario ' + (tIdx + 1) + ' of ' + TRAINER.length;
-      tQ.textContent = S.q;
-      tFb.textContent = '';
-      tNext.style.visibility = 'hidden';
-      tNext.textContent = tIdx === TRAINER.length - 1 ? 'See result' : 'Next scenario';
-      tOpt.innerHTML = '';
-      LABELS.forEach(function (label, i) {
+  /* ---------- Generic scenario trainer (used six times) ---------- */
+  function makeTrainer(cfg) {
+    var root = $(cfg.root);
+    if (!root) return;
+    var idx = 0, score = 0, locked = false;
+    var qEl = $(cfg.q), optEl = $(cfg.options), fbEl = $(cfg.feedback),
+        progEl = $(cfg.progress), nextBtn = $(cfg.next), resEl = $(cfg.result);
+    var navEl = $(cfg.root + ' .quiz__nav');
+    function render() {
+      locked = false;
+      var S = cfg.items[idx];
+      progEl.textContent = cfg.progressWord + ' ' + (idx + 1) + ' of ' + cfg.items.length;
+      qEl.textContent = S.q;
+      fbEl.textContent = '';
+      nextBtn.style.visibility = 'hidden';
+      nextBtn.textContent = idx === cfg.items.length - 1 ? 'See result' : nextBtn.textContent;
+      optEl.innerHTML = '';
+      var labels = S.opts || cfg.labels;
+      labels.forEach(function (label, i) {
         var b = document.createElement('button');
         b.className = 'opt';
-        b.innerHTML = '<span class="mark">' + String.fromCharCode(65 + i) + '</span><span>' + label + ' learning</span>';
+        b.innerHTML = '<span class="mark">' + String.fromCharCode(65 + i) + '</span><span>' + label + '</span>';
         b.addEventListener('click', function () {
-          if (tLocked) return; tLocked = true;
+          if (locked) return; locked = true;
           var right = i === S.answer;
-          if (right) tScore++;
-          $$('.opt', tOpt).forEach(function (o, oi) {
+          if (right) score++;
+          $$('.opt', optEl).forEach(function (o, oi) {
             o.setAttribute('disabled', 'true');
             if (oi === S.answer) o.classList.add('correct');
           });
           if (!right) b.classList.add('wrong');
-          tFb.textContent = (right ? '✓ ' : '✗ ') + S.why;
-          tFb.style.color = right ? 'var(--vu-gold-flat)' : '#c76b5a';
-          tNext.style.visibility = 'visible';
+          fbEl.textContent = (right ? '✓ ' : '✗ ') + S.why;
+          fbEl.style.color = right ? cfg.goodColor : '#c76b5a';
+          nextBtn.style.visibility = 'visible';
         });
-        tOpt.appendChild(b);
+        optEl.appendChild(b);
       });
     }
-    tNext.addEventListener('click', function () {
-      tIdx++;
-      if (tIdx >= TRAINER.length) {
-        $('#mlTrainer .quiz__nav').style.display = 'none';
-        tQ.textContent = ''; tOpt.innerHTML = ''; tProg.textContent = ''; tFb.textContent = '';
-        tRes.hidden = false;
-        tRes.innerHTML = '<div class="quiz__score gold-text">' + tScore + ' / ' + TRAINER.length + '</div>' +
-          '<p style="margin-top:.75rem;color:rgba(255,255,255,.85)">' +
-          (tScore >= 3 ? 'You think like an ML engineer. You matched the training method to the data available.'
-                       : 'Close. The tell is the data: labels → supervised, no labels → unsupervised, rewards → reinforcement.') +
-          '</p><button class="btn btn--ghost" id="trainRetry" style="margin-top:1rem">Run it again</button>';
-        $('#trainRetry').addEventListener('click', function () {
-          tIdx = 0; tScore = 0; tRes.hidden = true;
-          $('#mlTrainer .quiz__nav').style.display = '';
-          tRender();
+    nextBtn.addEventListener('click', function () {
+      idx++;
+      if (idx >= cfg.items.length) {
+        navEl.style.display = 'none';
+        qEl.textContent = ''; optEl.innerHTML = ''; progEl.textContent = ''; fbEl.textContent = '';
+        resEl.hidden = false;
+        resEl.innerHTML = '<div class="quiz__score gold-text">' + score + ' / ' + cfg.items.length + '</div>' +
+          '<p style="margin-top:.75rem;color:' + cfg.resultColor + '">' +
+          (score >= cfg.passAt ? cfg.passMsg : cfg.failMsg) +
+          '</p><button class="btn btn--ghost" data-retry style="margin-top:1rem">Run it again</button>';
+        $('[data-retry]', resEl).addEventListener('click', function () {
+          idx = 0; score = 0; resEl.hidden = true;
+          navEl.style.display = '';
+          render();
         });
-      } else tRender();
+      } else render();
     });
-    tRender();
+    render();
   }
 
+
+  /* Is that AI? (Section 01) */
+  makeTrainer({
+    root: '#isAI', q: '#iaQ', options: '#iaOptions', feedback: '#iaFeedback',
+    progress: '#iaProgress', next: '#iaNext', result: '#iaResult',
+    progressWord: 'Everyday thing', goodColor: 'var(--vu-oak)',
+    resultColor: 'var(--ink-soft, #555)', passAt: 4,
+    passMsg: 'See? You have been using AI for years. Today you just learn to use it on purpose.',
+    failMsg: 'The test is simple: did the program LEARN from examples, or was every step written out by a person? Learned = AI.',
+    labels: ['Yes, that\'s AI', 'No, that\'s a regular program'],
+    items: [
+      { q: 'Your phone suggests the next word while you type a text message.',
+        answer: 0, why: 'That\'s AI. It learned from millions of sentences which word usually comes next. Today\'s chat tools are this same idea, grown up.' },
+      { q: 'Your email quietly moves junk mail to the spam folder.',
+        answer: 0, why: 'AI. Nobody wrote a rule for every possible junk email; the filter learned what spam looks like from millions of examples.' },
+      { q: 'A calculator adds 456 + 789.',
+        answer: 1, why: 'Not AI. Every step is a fixed rule a person wrote. It never learned anything and it never guesses. That\'s the difference.' },
+      { q: 'Your maps app reroutes you around a traffic jam.',
+        answer: 0, why: 'AI. It learned traffic patterns from millions of drives and predicts which road is fastest right now.' },
+      { q: 'Netflix or YouTube suggests something you end up loving.',
+        answer: 0, why: 'AI. It noticed patterns in what you (and people like you) watched. You\'ve been AI\'s customer for years without the name tag.' }
+    ]
+  });
+
+  /* Pick the next move (Section 02) */
+  makeTrainer({
+    root: '#followUp', q: '#fuQ', options: '#fuOptions', feedback: '#fuFeedback',
+    progress: '#fuProgress', next: '#fuNext', result: '#fuResult',
+    progressWord: 'Moment', goodColor: 'var(--vu-gold-flat)',
+    resultColor: 'rgba(255,255,255,.85)', passAt: 4,
+    passMsg: 'That\'s the whole skill: ask, look, add one detail, ask again. Like giving directions to a helpful new assistant.',
+    failMsg: 'The pattern to remember: don\'t give up, and don\'t settle. Tell it what was wrong or what\'s missing, and it fixes its own draft.',
+    labels: [],
+    items: [
+      { q: 'You asked for "an email to my team" and got something stiff and formal. Your next move?',
+        opts: ['Give up, write it yourself', 'Type: "Make it warmer and shorter, we\'re a friendly team"', 'Send the stiff version anyway'],
+        answer: 1, why: 'Just tell it, in plain words, like you would a person. It rewrites instantly and doesn\'t mind the feedback.' },
+      { q: 'The answer is good but way too long. Next move?',
+        opts: ['"Cut this to five sentences"', 'Delete words yourself for ten minutes', 'Ask a completely new question'],
+        answer: 0, why: 'One sentence gets you the short version. Shorter, longer, simpler, friendlier: it reshapes on request.' },
+      { q: 'You asked for meeting ideas and got generic ones. Next move?',
+        opts: ['Accept it, AI is just generic', 'Add the details it was missing: "This is for a 6-person finance team meeting about year-end close"', 'Ask the same question again, word for word'],
+        answer: 1, why: 'Generic answers usually mean a generic question. The more it knows about your situation, the better the answer gets.' },
+      { q: 'It gave you a date for a campus event that doesn\'t sound right. Next move?',
+        opts: ['Trust it, computers don\'t make mistakes', 'Check the real calendar before repeating it', 'Ask the AI if it\'s sure'],
+        answer: 1, why: 'AI can be confidently wrong: it sounds certain even when guessing. Anything important — dates, numbers, names — gets checked at the source. (Asking "are you sure?" isn\'t checking.)' },
+      { q: 'The first answer is honestly... pretty good. Next move?',
+        opts: ['Perfect means done, copy and send', 'Read it once with your own eyes, fix what only you would know, then use it', 'Ask for ten more versions just in case'],
+        answer: 1, why: 'AI writes the draft; you stay the editor. Your name goes on it, so your eyes go over it. That partnership is the whole model.' }
+    ]
+  });
+
+  /* Green, yellow, red (Section 03) */
+  makeTrainer({
+    root: '#lightJudge', q: '#ljQ', options: '#ljOptions', feedback: '#ljFeedback',
+    progress: '#ljProgress', next: '#ljNext', result: '#ljResult',
+    progressWord: 'Situation', goodColor: 'var(--vu-oak)',
+    resultColor: 'var(--ink-soft, #555)', passAt: 4,
+    passMsg: 'You\'ve got the traffic light. Three seconds of "which color is this?" before you paste is the safest habit in this course.',
+    failMsg: 'The rule: public or generic → green. Internal work stuff → yellow, Vanderbilt-approved tools only. Private information about people → red, keep it out.',
+    labels: ['🟢 Green: go ahead', '🟡 Yellow: approved VU tools only', '🔴 Red: keep it out of AI'],
+    items: [
+      { q: 'Asking AI to explain what "FERPA" means, in plain English.',
+        answer: 0, why: 'Green. It\'s a public term; there\'s nothing private in the question. Asking AI to explain things is one of its best uses.' },
+      { q: 'Pasting a draft of an internal team announcement so AI can tidy it up.',
+        answer: 1, why: 'Yellow. Internal work content belongs only in Vanderbilt-approved tools (like Copilot signed in with your VU account), never a random free website.' },
+      { q: 'Pasting a student\'s name, grades, and situation to ask for advice.',
+        answer: 2, why: 'Red. Private information about real people — students, patients, employees — never goes into an AI tool. Describe the situation with no names and no identifying details, or don\'t use AI for it.' },
+      { q: 'Asking for ten icebreaker ideas for a staff meeting.',
+        answer: 0, why: 'Green. Generic and harmless: exactly the kind of chore AI eats for breakfast.' },
+      { q: 'Pasting a colleague\'s performance review to "make it sound better."',
+        answer: 2, why: 'Red. It\'s private information about a person. The wording help is tempting; the confidentiality is non-negotiable. Rewrite it with the situation genericized, or ask HR for language.' }
+    ]
+  });
+
+  /* Match the superpower (Section 04) */
+  makeTrainer({
+    root: '#superPower', q: '#spQ', options: '#spOptions', feedback: '#spFeedback',
+    progress: '#spProgress', next: '#spNext', result: '#spResult',
+    progressWord: 'Chore', goodColor: 'var(--vu-gold-flat)',
+    resultColor: 'rgba(255,255,255,.85)', passAt: 4,
+    passMsg: 'Five superpowers, and you can now spot which chore each one eats. One of these is your first task — next slide.',
+    failMsg: 'The five to remember: Draft it (first versions), Summarize it (long → short), Brainstorm it (ideas fast), Explain it (jargon → plain), Rewrite it (same words, different tone).',
+    labels: ['Draft it', 'Summarize it', 'Brainstorm it', 'Explain it', 'Rewrite it'],
+    items: [
+      { q: 'A 14-page policy PDF landed in your inbox and you have four minutes before the meeting.',
+        answer: 1, why: 'Summarize it: "give me the five things a staff member actually needs to know from this." Long-to-short is AI\'s favorite trick.' },
+      { q: 'You\'ve been staring at a blank email to a difficult vendor for twenty minutes.',
+        answer: 0, why: 'Draft it. The blank page is the enemy; a draft you can fix beats an empty screen you can\'t. AI never gets writer\'s block.' },
+      { q: 'You need a name and theme for the new mentoring program by Friday.',
+        answer: 2, why: 'Brainstorm it: "give me 15 name ideas, from safe to bold." You stay the judge; it just fills the table with options.' },
+      { q: 'IT sent instructions full of words like "SSO" and "MFA enrollment" and you\'re lost.',
+        answer: 3, why: 'Explain it: "explain this like I\'m not technical." No embarrassment, infinite patience, plain English on demand.' },
+      { q: 'Your announcement is accurate but reads like a legal notice, and it\'s going to students.',
+        answer: 4, why: 'Rewrite it: "same information, friendlier and half as long." Same facts, new voice, ten seconds.' }
+    ]
+  });
   /* ---------- In-flow video embeds (click-to-load, privacy-friendly) ---------- */
   $$('.yt').forEach(function (box) {
     var btn = $('.yt__load', box);
@@ -466,91 +346,76 @@
     });
   });
 
-  /* ---------- INTERACTIVE: Prompt Lab (task -> choices -> graded outcome) ---------- */
-  var lab = $('#promptLab');
-  if (lab) {
-    var SLOTS = [
-      { key: 'Role', opts: [
-        { t: '“You are an AI.”', pts: 1, coach: 'Role: “an AI” gives the model nothing to aim at. Give it a profession and a disposition.' },
-        { t: '“You are a helpful assistant.”', pts: 2, coach: 'Role: helpful, but generic. A specific expertise sets tone and depth.' },
-        { t: '“You are an experienced internal-communications writer who explains change with empathy.”', pts: 3, coach: 'Role: expertise plus disposition. That’s the Persona Pattern at full strength.' }]},
-      { key: 'Context', opts: [
-        { t: '(no context, jump straight to the ask)', pts: 1, coach: 'Context: with nothing to go on, the model invents details, and some will be wrong.' },
-        { t: '“My team is switching expense systems next month.”', pts: 2, coach: 'Context: the what is here; the who and the worry are missing.' },
-        { t: '“My 12-person team moves to a new expense system next month; several people are anxious; training is available before go-live.”', pts: 3, coach: 'Context: who, what, when, and the emotional temperature. Everything the draft needs.' }]},
-      { key: 'Task', opts: [
-        { t: '“Write something about this.”', pts: 1, coach: 'Task: “something” gets you anything. Name the deliverable.' },
-        { t: '“Draft an announcement email.”', pts: 2, coach: 'Task: clear deliverable. Adding its job (reassure, point to training) would sharpen it.' },
-        { t: '“Draft an announcement email that explains the timeline, reassures the team, and points to the training.”', pts: 3, coach: 'Task: deliverable plus its three jobs. The model knows exactly what done looks like.' }]},
-      { key: 'Format', opts: [
-        { t: '(no format, let it decide)', pts: 1, coach: 'Format: unspecified means you edit for length and structure later.' },
-        { t: '“Keep it short.”', pts: 2, coach: 'Format: short compared to what? Numbers beat adjectives.' },
-        { t: '“Three short paragraphs, warm and direct, under 200 words, ending with one clear next step.”', pts: 3, coach: 'Format: shape, tone, length, and an ending. Nothing left to chance.' }]}
-    ];
-    var picks = [null, null, null, null];
-    var slotsEl = $('#labSlots'), runBtn = $('#labRun'), statusEl = $('#labStatus'), outEl = $('#labOutcome');
-    SLOTS.forEach(function (slot, si) {
-      var d = document.createElement('div');
-      d.className = 'slot';
-      d.innerHTML = '<h3>' + (si + 1) + ' · ' + slot.key + '</h3>';
-      slot.opts.forEach(function (o, oi) {
-        var b = document.createElement('button');
-        b.className = 'opt'; b.setAttribute('aria-pressed', 'false');
-        b.innerHTML = '<span class="mark">' + String.fromCharCode(65 + oi) + '</span><span>' + o.t + '</span>';
-        b.addEventListener('click', function () {
-          picks[si] = oi;
-          $$('.opt', d).forEach(function (x, xi) { x.setAttribute('aria-pressed', String(xi === oi)); });
-          var ready = picks.every(function (p) { return p !== null; });
-          runBtn.disabled = !ready;
-          statusEl.textContent = ready ? 'Ready, run it' :
-            'Choose ' + picks.filter(function (p) { return p === null; }).length + ' more part(s)';
-          outEl.hidden = true;
-        });
-        d.appendChild(b);
-      });
-      slotsEl.appendChild(d);
-    });
-    var SAMPLES = {
-      strong: '“Team, starting next month we’re moving to our new expense system. Here’s the timeline, what’s changing, and what isn’t… Training is open now, and I’ve set aside time in Friday’s meeting for questions. One step for this week: log in once before the 1st.”',
-      mid: '“Dear team, I am writing to inform you about an upcoming change to our expense system. Please be advised that training resources may be available. Do not hesitate to reach out with any questions…”',
-      weak: '“Change can be challenging, but it is also an opportunity for growth! Exciting things are happening. Stay tuned for more information coming soon…”'
+
+  /* ---------- INTERACTIVE: first prompt builder (Section 05) ---------- */
+  var fp = $('#firstPrompt');
+  if (fp) {
+    var fpPick = { task: null, format: null };
+    var fpDetail = $('#fpDetail'), fpBtn = $('#fpBuild'), fpStatus = $('#fpStatus'), fpOut = $('#fpOut');
+    var TASKS = {
+      email: 'Write a first draft of an email',
+      summary: 'Summarize the text I paste below into the key points',
+      ideas: 'Give me 10 ideas',
+      explain: 'Explain, in plain non-technical English,'
     };
-    runBtn.addEventListener('click', function () {
-      var score = picks.reduce(function (t, p, i) { return t + SLOTS[i].opts[p].pts; }, 0); // 4..12
-      var pct = Math.round((score / 12) * 100);
-      var tier = score >= 11 ? 'strong' : score >= 8 ? 'mid' : 'weak';
-      var head = tier === 'strong' ? 'Strong first draft, ready to edit rather than rewrite.'
-               : tier === 'mid' ? 'Usable but generic. You’ll spend real time editing this.'
-               : 'Vague output. The model had to guess, and it guessed like a greeting card.';
-      var coach = picks.map(function (p, i) { return '<div><b>' + SLOTS[i].key + ':</b> ' + SLOTS[i].opts[p].coach.replace(/^(Role|Context|Task|Format):\s*/, '') + '</div>'; }).join('');
-      outEl.innerHTML = '<span class="tag">Outcome · ' + score + ' / 12</span>' +
-        '<div class="lab__meter"><span style="width:0"></span></div>' +
-        '<p style="margin:0;color:#fff;font-weight:500">' + head + '</p>' +
-        '<div class="sample">' + SAMPLES[tier] + '</div>' +
-        '<div class="lab__coach">' + coach + '</div>' +
-        (tier !== 'strong' ? '<p class="why" style="margin-top:1rem"><b>Try again:</b> upgrade your weakest part and re-run, then watch the outcome change.</p>' : '<p class="why" style="margin-top:1rem"><b>Now the real thing:</b> use this structure on the email you picked in Section 06.</p>');
-      outEl.hidden = false;
-      requestAnimationFrame(function () {
-        var bar = $('.lab__meter span', outEl);
-        if (bar) requestAnimationFrame(function () { bar.style.width = pct + '%'; });
+    var FORMATS = {
+      short: 'Keep it short: a few sentences at most.',
+      bullets: 'Give it to me as a bulleted list.',
+      steps: 'Walk me through it step by step.'
+    };
+    function fpReady() {
+      var ok = fpPick.task && fpPick.format && fpDetail.value.trim().length >= 8;
+      fpBtn.disabled = !ok;
+      fpStatus.textContent = ok ? 'Ready, build it' : 'Pick a job, add your details, pick a shape';
+      return ok;
+    }
+    fpDetail.addEventListener('input', fpReady);
+    [['#fpTask', 'task', 'data-task'], ['#fpFormat', 'format', 'data-format']].forEach(function (cfg) {
+      var group = $(cfg[0]);
+      $$('.opt', group).forEach(function (b) {
+        b.addEventListener('click', function () {
+          fpPick[cfg[1]] = b.getAttribute(cfg[2]);
+          $$('.opt', group).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          fpOut.hidden = true;
+          fpReady();
+        });
       });
-      outEl.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+    });
+    fpBtn.addEventListener('click', function () {
+      if (!fpReady()) return;
+      var esc = function (t) { return t.replace(/</g, '&lt;'); };
+      var promptText = TASKS[fpPick.task] + ' ' + fpDetail.value.trim().replace(/[.]+$/, '') + '. ' + FORMATS[fpPick.format];
+      fpOut.innerHTML = '<span class="tag">Your first prompt · copy it, then go try it</span>' +
+        '<p style="margin:.75rem 0 0;font-family:var(--font-serif);font-size:1.15rem;color:#fff">&ldquo;' + esc(promptText) + '&rdquo;</p>' +
+        '<div class="lab__runrow" style="margin-top:1.1rem">' +
+        '<button class="btn" id="fpCopy">Copy my prompt</button>' +
+        '<span class="quiz__progress" id="fpCopied" style="color:rgba(255,255,255,.6)">Then paste it into a Vanderbilt-approved AI tool</span></div>' +
+        '<p class="why" style="margin-top:1rem"><b>Then the two-step:</b> read the answer, add one detail it was missing, and ask again. That second ask is where it gets good.</p>';
+      fpOut.hidden = false;
+      $('#fpCopy').addEventListener('click', function () {
+        (navigator.clipboard ? navigator.clipboard.writeText(promptText) : Promise.reject()).then(function () {
+          $('#fpCopied').textContent = 'Copied. Paste it into the tool and press enter.';
+        }, function () {
+          $('#fpCopied').textContent = 'Select the prompt text above and copy it manually.';
+        });
+      });
+      fpOut.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
     });
   }
 
-  /* ---------- INTERACTIVE: My AI Plan capstone ---------- */
-  var planEl = $('#aiPlan');
+  /* ---------- INTERACTIVE: My First Try capstone ---------- */
+  var planEl = $('#firstTry');
   if (planEl) {
-    var pick = { kind: null, level: null, bank: null };
+    var pick = { power: null, when: null };
     var taskIn = $('#planTask'), buildBtn = $('#planBuild'), statusEl2 = $('#planStatus'), outEl2 = $('#planOut');
     function planReady() {
-      var ok = taskIn.value.trim().length >= 8 && pick.kind && pick.level && pick.bank;
+      var ok = taskIn.value.trim().length >= 8 && pick.power && pick.when;
       buildBtn.disabled = !ok;
-      statusEl2.textContent = ok ? 'Ready, build it' : 'Fill in all four parts';
+      statusEl2.textContent = ok ? 'Ready, build it' : 'Fill in all three parts';
       return ok;
     }
     taskIn.addEventListener('input', planReady);
-    [['#planKind','kind','data-kind'], ['#planData','level','data-level'], ['#planBank','bank','data-bank']].forEach(function (cfg) {
+    [['#planPower', 'power', 'data-power'], ['#planWhen', 'when', 'data-when']].forEach(function (cfg) {
       var group = $(cfg[0]);
       $$('.opt', group).forEach(function (b) {
         b.addEventListener('click', function () {
@@ -561,52 +426,40 @@
         });
       });
     });
-    var KIND = {
-      draft:    { role: 'an experienced writer who knows my field', task: 'draft it so I can edit rather than start from blank', fmt: 'matching the length and tone I normally use' },
-      organize: { role: 'a careful analyst', task: 'organize it and surface the three things worth my attention', fmt: 'as a short structured summary with headings' },
-      replies:  { role: 'a professional and warm correspondent', task: 'draft a reply that answers the question and closes the loop', fmt: 'in three sentences or fewer, ready to personalize' },
-      ideas:    { role: 'a sharp thinking partner', task: 'give me ten distinct options before I pick a direction', fmt: 'as a numbered list, one line each' }
+    var POWER = {
+      draft: 'Draft it — ask for a first version, then make it yours',
+      summarize: 'Summarize it — paste the long thing (yellow rule: approved tool), ask for the short version',
+      brainstorm: 'Brainstorm it — ask for 10 ideas, keep the two good ones',
+      explain: 'Explain it — ask for plain English, no jargon',
+      rewrite: 'Rewrite it — same facts, better tone or length'
     };
-    var LEVEL = {
-      green:  { tool: 'ChatGPT, Amplify, or Copilot (green-level content works anywhere approved)', warn: '' },
-      yellow: { tool: 'Amplify, or Copilot signed in with your VU account (keep internal content inside Vanderbilt protections)', warn: '' },
-      red:    { tool: 'Stop: this task touches red-level data, which never goes in a generative AI tool.', warn: 'Plan B: strip out every name, ID, and sensitive detail first, or pick a different task for your first week.' }
-    };
-    var BANK = {
-      deep: 'the deeper work you never get to',
-      breathe: 'actual breathing room. Do not backfill it',
-      learn: 'learning time (start with the Jules White course on the closing slide)'
-    };
+    var WHEN = { today: 'today, before the day ends', tomorrow: 'tomorrow morning, first thing', week: 'this week, on a day you pick right now' };
     buildBtn.addEventListener('click', function () {
       if (!planReady()) return;
       var task = taskIn.value.trim();
-      var k = KIND[pick.kind], l = LEVEL[pick.level];
-      var prompt = 'You are ' + k.role + '. Context: [one or two lines about who this is for and what they need]. My task: ' + task + '. Please ' + k.task + ', ' + k.fmt + '.';
       var rows = '' +
-        '<div class="row"><b>My task</b><span>' + task.replace(/</g,'&lt;') + '</span></div>' +
-        '<div class="row"><b>Tool</b><span>' + l.tool + (l.warn ? '<br><span style="color:#ECB748">' + l.warn + '</span>' : '') + '</span></div>' +
-        (pick.level !== 'red' ? '<div class="row"><b>Starter prompt</b><span class="plan__prompt">' + prompt.replace(/</g,'&lt;') + '</span></div>' : '') +
-        '<div class="row"><b>My check</b><span>Before anything ships: verify every fact, name, and number against the source. I am the editor; nothing goes out unread.</span></div>' +
-        '<div class="row"><b>Saved time</b><span>The first hour this saves goes to ' + BANK[pick.bank] + '.</span></div>' +
-        '<div class="row"><b>First rep</b><span>I will try this once within the next two workdays.</span></div>';
-      outEl2.innerHTML = '<span class="tag">My AI plan · this week</span>' +
+        '<div class="row"><b>My task</b><span>' + task.replace(/</g, '&lt;') + '</span></div>' +
+        '<div class="row"><b>The superpower</b><span>' + POWER[pick.power] + '.</span></div>' +
+        '<div class="row"><b>When</b><span>' + WHEN[pick.when].charAt(0).toUpperCase() + WHEN[pick.when].slice(1) + '.</span></div>' +
+        '<div class="row"><b>The two-step</b><span>Read the first answer, add one detail it was missing, ask again.</span></div>' +
+        '<div class="row"><b>The safety check</b><span>Three seconds before you paste anything: green, yellow, or red? And check any fact that matters before you use it.</span></div>';
+      outEl2.innerHTML = '<span class="tag">My first try</span>' +
         '<div class="plan__out-grid">' + rows + '</div>' +
         '<div class="lab__runrow" style="margin-top:1.25rem">' +
-        '<button class="btn" id="planCopy">Copy my plan</button>' +
-        '<span class="quiz__progress" id="planCopied" style="color:rgba(255,255,255,.6)">Paste it somewhere you will see on Monday</span></div>';
+        '<button class="btn" id="planCopy">Copy my card</button>' +
+        '<span class="quiz__progress" id="planCopied" style="color:rgba(255,255,255,.6)">Put it somewhere you\'ll see it</span></div>';
       outEl2.hidden = false;
       $('#planCopy').addEventListener('click', function () {
-        var text = 'MY AI PLAN (AI Basics, Vanderbilt)\n' +
+        var text = 'MY FIRST TRY (AI Basics, Vanderbilt)\n' +
           'Task: ' + task + '\n' +
-          'Tool: ' + l.tool + (l.warn ? ' ' + l.warn : '') + '\n' +
-          (pick.level !== 'red' ? 'Starter prompt: ' + prompt + '\n' : '') +
-          'My check: verify every fact, name, and number before anything ships.\n' +
-          'Saved time goes to: ' + BANK[pick.bank] + '.\n' +
-          'First rep: within two workdays.';
+          'Superpower: ' + POWER[pick.power] + '\n' +
+          'When: ' + WHEN[pick.when] + '\n' +
+          'The two-step: read the answer, add one missing detail, ask again.\n' +
+          'Safety: green/yellow/red check before pasting; verify facts that matter.';
         (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () {
-          $('#planCopied').textContent = 'Copied. Paste it into notes, email, or Teams now.';
+          $('#planCopied').textContent = 'Copied. See you on the other side of your first try.';
         }, function () {
-          $('#planCopied').textContent = 'Select the plan text above and copy it manually.';
+          $('#planCopied').textContent = 'Select the card text above and copy it manually.';
         });
       });
       outEl2.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
@@ -617,24 +470,21 @@
   var recap = $('#recap');
   if (recap) {
     var QUESTIONS = [
-      { q: 'Which statement best describes machine learning?',
-        opts: ['A computer following hand-written rules', 'A system that finds patterns from data instead of explicit rules', 'A faster kind of database', 'A robot with sensors'],
-        correct: 1, why: 'ML learns patterns from examples rather than being told every rule.' },
-      { q: 'A large language model generates text by…',
-        opts: ['Looking answers up in a fixed table', 'Predicting the next token one step at a time', 'Copying the closest webpage', 'Running a spell-checker'],
-        correct: 1, why: 'LLMs repeatedly predict the most plausible next token.' },
-      { q: 'Raising the "temperature" of a model makes its output…',
-        opts: ['More random and creative', 'More accurate and factual', 'Faster to compute', 'Shorter'],
-        correct: 0, why: 'Higher temperature means more randomness and variety; lower means more focused.' },
-      { q: 'A "hallucination" in AI refers to…',
-        opts: ['A rendering bug', 'Confident output that is factually wrong', 'A privacy breach', 'Slow response time'],
-        correct: 1, why: 'Models can state false information fluently and confidently.' },
-      { q: 'The most reliable way to improve an AI’s answer is to…',
-        opts: ['Ask louder', 'Give clear context, task, and desired format', 'Use more emojis', 'Repeat the same prompt'],
-        correct: 1, why: 'Structured prompts (role, context, task, format) drive better results.' },
-      { q: 'Research on AI at work finds that the time it saves most often…',
-        opts: ['Becomes guaranteed free time', 'Quietly refills with more tasks and faster expectations', 'Is tracked automatically by HR', 'Has no effect on workload'],
-        correct: 1, why: 'Workload creep is the default. Teams keep the gains by deciding, explicitly, where saved time goes.' }
+      { q: 'In one sentence: what is AI?',
+        opts: ['A robot that thinks like a human', 'A computer program that learned from millions of examples, so it can predict and generate useful answers', 'A search engine with better manners', 'Magic'],
+        correct: 1, why: 'Learned from examples is the key. That\'s why it\'s so capable — and why it can still be confidently wrong.' },
+      { q: 'How do you use an AI chat tool?',
+        opts: ['You need to learn some code first', 'Type what you need in plain English, like texting a capable assistant, then refine', 'Fill out a special form', 'Speak only in keywords'],
+        correct: 1, why: 'Plain English, full sentences, details welcome. Then the two-step: add what it was missing and ask again.' },
+      { q: 'The answer looks perfect and includes a statistic you\'ll repeat in a meeting. What do you do?',
+        opts: ['Use it, it sounds confident', 'Check the statistic at the source first, because AI can be confidently wrong', 'Ask the AI if it\'s sure', 'Add "probably" when you say it'],
+        correct: 1, why: 'Confident tone is not evidence. Facts, dates, numbers, and names get checked before your name goes on them.' },
+      { q: 'Which of these should NEVER go into an AI tool?',
+        opts: ['A question about a public policy', 'Your draft of a generic announcement', 'A student\'s name and grades', 'A request for meeting icebreakers'],
+        correct: 2, why: 'Red light: private information about real people stays out. When in doubt, describe the situation with no names, or don\'t.' },
+      { q: 'What\'s the smartest FIRST task to give AI?',
+        opts: ['A final decision about a person', 'A real but low-stakes chore: a draft, a summary, ten ideas', 'Your most sensitive project', 'Nothing, watching others is enough'],
+        correct: 1, why: 'Start where mistakes are cheap and the time savings are real. Confidence comes from reps, and the first rep is this week.' }
     ];
     var idx = 0, score = 0, locked = false;
     var qEl = $('#recapQ'), optEl2 = $('#recapOptions'), fbEl = $('#recapFeedback'),
@@ -678,9 +528,9 @@
       panelEl.hidden = true;
       resultEl.hidden = false;
       var pct = Math.round((score / QUESTIONS.length) * 100);
-      var msg = pct >= 80 ? 'You’ve got the fundamentals down.' :
-                pct >= 50 ? 'Solid start. Revisit the sections you missed.' :
-                            'Worth another pass through the deck.';
+      var msg = pct >= 80 ? 'You\'re ready. Your first try is waiting on the next slide.' :
+                pct >= 50 ? 'Solid. Skim the section you missed, then go do your first try.' :
+                            'Worth one more pass through the deck — it\'s short — then try again.';
       resultEl.innerHTML = '<span class="eyebrow">Your result</span>' +
         '<div class="quiz__score gold-text">' + score + ' / ' + QUESTIONS.length + '</div>' +
         '<p class="lead" style="margin-top:1rem">' + msg + '</p>' +
@@ -707,7 +557,6 @@
   var counter = $('#deckCount');
   var current = 0;
 
-  // build dots
   if (dotWrap) {
     slides.forEach(function (s, i) {
       var b = document.createElement('button');

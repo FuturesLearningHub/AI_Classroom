@@ -34,10 +34,6 @@
   li { margin-bottom: 4px; }
   b { font-weight: 600; }
   .full { grid-column: 1 / -1; }
-  .light { padding: 6px 9px; border-radius: 3px; margin-bottom: 5px; }
-  .g { background: #eef3ee; border: 1px solid #8BA18E; }
-  .y { background: #fdf6e3; border: 1px solid #ECB748; }
-  .r { background: #faeeec; border: 1px solid #c76b5a; }
   .prompt { font-family: 'Libre Caslon Display', serif; font-size: 13.5px; border-left: 2px solid #CFAE70;
     padding-left: 10px; color: #333; }
   footer { margin-top: 16px; border-top: 1px solid #E4E4E4; padding-top: 10px; font-size: 11px; color: #777;
@@ -47,6 +43,10 @@
     padding: 9px 16px; font-family: Inter, Arial, sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; }
   @media print { .printbtn { display: none; } body { font-size: 11.5px; } .sheet { padding: 0; max-width: none; } }
   @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .light { padding: 6px 9px; border-radius: 3px; margin-bottom: 5px; }
+  .g { background: #eef3ee; border: 1px solid #8BA18E; }
+  .y { background: #fdf6e3; border: 1px solid #ECB748; }
+  .r { background: #faeeec; border: 1px solid #c76b5a; }
 </style>
 </head>
 <body>
@@ -62,57 +62,55 @@
 
   <div class="grid">
     <div class="box">
-      <h2>The four-part prompt</h2>
+      <h2>What is AI, in one sentence</h2>
+      <p style="margin:0">A computer program that <b>learned from millions of examples</b>, so it can predict, suggest, and write things that fit your situation. Not a robot, not magic, not always right. You already use it: word suggestions, spam filters, map routes.</p>
+    </div>
+
+    <div class="box">
+      <h2>How to use it (the whole skill)</h2>
       <ol>
-        <li><b>Role:</b> who the AI should be. "You are an experienced internal-communications writer." (Dr. Jules White's Persona Pattern)</li>
-        <li><b>Context:</b> what it can't guess. Who this is for, what they know, what's at stake.</li>
-        <li><b>Task:</b> the one deliverable, plus its job. "Draft an email that explains the timeline and reassures the team."</li>
-        <li><b>Format:</b> shape, tone, length. "Three short paragraphs, warm and direct, under 200 words."</li>
+        <li><b>Ask</b> in plain English, like texting a capable assistant. Details help: who it's for, what it's about, how it should sound.</li>
+        <li><b>Look</b> at the answer. It's a draft, not a verdict.</li>
+        <li><b>Improve:</b> "shorter," "warmer," "add the deadline." One follow-up is where it gets good.</li>
       </ol>
-      <p style="margin:8px 0 0"><b>Then iterate:</b> correct it like a new hire. "Shorter." "Warmer." "As a table."</p>
+    </div>
+
+    <div class="box full">
+      <h2>The traffic light — ask it before you paste 🟢🟡🔴</h2>
+      <div class="light g"><b>🟢 Green — go ahead:</b> public topics, generic drafts, brainstorming, "explain this." Any approved tool.</div>
+      <div class="light y"><b>🟡 Yellow — approved VU tools only:</b> internal work content (your drafts, work docs). Copilot signed in with your VU account — never a random free website.</div>
+      <div class="light r"><b>🔴 Red — keep it out:</b> private info about real people: names with grades, health, personnel issues, passwords. Describe it without names, or don't use AI for it.</div>
     </div>
 
     <div class="box">
-      <h2>What can you paste? 🟢🟡🔴</h2>
-      <div class="light g"><b>🟢 Green, any approved tool:</b> public info, generic questions, drafts with no names or internal details.</div>
-      <div class="light y"><b>🟡 Yellow, Amplify or VU-signed Copilot only:</b> internal plans, processes, work drafts with VU context.</div>
-      <div class="light r"><b>🔴 Red, never in any AI tool:</b> FERPA, HIPAA, salaries and personnel, donor data, credentials, unpublished research, contracts.</div>
-    </div>
-
-    <div class="box">
-      <h2>Which tool, when</h2>
+      <h2>The five superpowers</h2>
       <ul>
-        <li><b>Amplify</b> (<a href="https://www.vanderbilt.ai/">vanderbilt.ai</a>): university work, internal context. Reach for it first.</li>
-        <li><b>Copilot</b> (<a href="https://copilot.microsoft.com">copilot.microsoft.com</a>, VU sign-in): work already inside Word, Outlook, Excel, Teams.</li>
-        <li><b>ChatGPT</b> (<a href="https://chat.openai.com">chat.openai.com</a>): public-level content, speed and breadth.</li>
-        <li><b>Claude / Perplexity / Gamma:</b> long documents / cited research / slide decks. Green-level content only.</li>
+        <li><b>Draft it:</b> first versions of emails, notes, letters.</li>
+        <li><b>Summarize it:</b> long document → the five things you need.</li>
+        <li><b>Brainstorm it:</b> ten ideas in ten seconds; you pick.</li>
+        <li><b>Explain it:</b> jargon → plain English, no embarrassment.</li>
+        <li><b>Rewrite it:</b> same facts, different tone or length.</li>
       </ul>
     </div>
 
     <div class="box">
-      <h2>Trust, but verify</h2>
+      <h2>The two rules that keep you safe</h2>
       <ul>
-        <li><b>Fact, date, number, name, citation:</b> check the source. Models invent realistic-looking ones.</li>
-        <li><b>Summary of your document:</b> spot-check two claims against the original.</li>
-        <li><b>Any draft:</b> you're the editor. Nothing ships unread.</li>
-        <li><b>Remember:</b> confident phrasing is not evidence. It predicts words; it doesn't know facts.</li>
+        <li><b>Check what matters.</b> AI sounds confident even when wrong. Facts, dates, numbers, names: verify before your name goes on them.</li>
+        <li><b>You do the judgment.</b> AI does chores; decisions about people stay with people. It doesn't get a vote.</li>
       </ul>
     </div>
 
     <div class="box full">
-      <h2>Your starter prompt, fill in the brackets</h2>
-      <p class="prompt">You are [role with expertise and disposition]. Context: [who this is for and what they need]. My task: [one specific deliverable and its job]. Please write it as [format: shape, tone, length].</p>
-    </div>
-
-    <div class="box full">
-      <h2>Keep the time it saves</h2>
-      <p style="margin:0">Decide, out loud, where the saved hour goes: deeper work, breathing room, or learning time. Watch for workload creep, always-on drift, and invisible checking labor. If work feels heavier, say so; renegotiating scope is a professional move. Support: <a href="https://hr.vanderbilt.edu/">Vanderbilt Employee Assistance &amp; Work-Life resources</a>.</p>
+      <h2>Your starter prompt, fill in the blanks</h2>
+      <p class="prompt">[The job: draft / summarize / give me ideas / explain] + [your details: who it's for, what it's about, how it should sound] + [the shape: short / bullets / step by step]. Example: "Write a warm, three-sentence email to my six-person team inviting them to Thursday's planning lunch. Keep it short."</p>
+      <p style="margin:6px 0 0"><b>Then the two-step:</b> read the answer, add one detail it was missing, ask again.</p>
     </div>
   </div>
 
   <footer>
     <span>AI Basics · Vanderbilt Learning Series · <a href="https://me5231979.github.io/AI_Classroom/">me5231979.github.io/AI_Classroom</a></span>
-    <span>Next step: <a href="https://www.coursera.org/learn/prompt-engineering">Prompt Engineering for ChatGPT, Dr. Jules White (Coursera, free to audit)</a></span>
+    <span>Next step: <a href="https://me5231979.github.io/AI-Advanced/">AI 201: Beyond the Basics</a></span>
   </footer>
 </div>
 </body>

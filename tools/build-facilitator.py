@@ -20,9 +20,10 @@ by_id = {sec['id']: sec for sec in notes['sections']}
 s = s.replace('href="assets/', 'href="../assets/')
 s = s.replace('src="assets/', 'src="../assets/')
 s = s.replace('href="cheatsheet.html"', 'href="../cheatsheet.html"')
+s = s.replace('href="worksheet.html"', 'href="../worksheet.html"')
 
 # ---- 2. head: title, noindex, no canonical/og confusion ----
-s = s.replace('<title>AI Basics: A Classroom Introduction | Vanderbilt</title>',
+s = s.replace('<title>AI Basics | Vanderbilt</title>',
               '<title>AI Basics — Facilitator Edition | Vanderbilt</title>')
 s = re.sub(r'<link rel="canonical"[^>]*>\n', '', s)
 s = s.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"')
@@ -30,8 +31,7 @@ s = s.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n
 # ---- 3. QR points at the LEARNER site ----
 s = s.replace('<div class="qr-card" id="qrCard" data-reveal>',
               f'<div class="qr-card" id="qrCard" data-reveal data-url="{LEARNER_URL}">')
-s = s.replace('Follow along on your own device. Every demo here is hands-on. Or just watch the screen; we\'ll drive.',
-              'Learners scan this code and land on the learner edition; your screen keeps the notes. Every demo is hands-on.')
+s = s.replace('Follow along on your own device.', 'Learners scan this code and land on the learner edition; your screen keeps the notes. Follow along on your own device.')
 
 # ---- 4. body class + nav badge ----
 s = s.replace('<body>', '<body class="fac">')
@@ -95,6 +95,8 @@ for label, key in (("A week before","weekBefore"),("The day before","dayBefore")
 mats = ''.join(f'<li>{esc2(x)}</li>' for x in meta['materials'])
 cont = ''.join(f'<div class="brief__row"><b>If {esc2(c["if"]).rstrip(".")}:</b> {esc2(c["then"])}</div>' for c in meta['contingencies'])
 tough = ''.join(f'<details class="brief__q"><summary>{esc2(t["q"])}</summary><p>{esc2(t["a"])}</p></details>' for t in meta['toughQuestions'])
+tmpl = ''.join(f'<details class="brief__q"><summary>{esc2(t["title"])}</summary><p>{esc2(t["body"])}</p></details>' for t in meta.get('templates', []))
+tmpl_box = f'<div class="brief__box brief__wide"><h3>Copy-paste templates</h3>{tmpl}</div>' if tmpl else ''
 briefing = f"""  <section class="slide on-dark" id="s-briefing" data-title="Facilitator briefing">
     <div class="wrap wrap-wide">
       <p class="eyebrow">Facilitator briefing · Read before you teach</p>
@@ -104,13 +106,14 @@ briefing = f"""  <section class="slide on-dark" id="s-briefing" data-title="Faci
         <div class="brief__box"><h3>Materials</h3><ul>{mats}</ul></div>
         <div class="brief__box brief__wide"><h3>When things go sideways</h3>{cont}</div>
         <div class="brief__box brief__wide"><h3>Tough questions, ready answers</h3>{tough}</div>
+        {tmpl_box}
       </div>
       <p class="why" style="margin-top:1.5rem"><b>After the session:</b> {esc2(meta['postSession'])}</p>
     </div>
   </section>
 
 """
-s = s.replace('  <!-- ============ 0 · WELCOME / QR ============ -->', briefing + '  <!-- ============ 0 · WELCOME / QR ============ -->', 1)
+s = s.replace('  <!-- ============ 0 · WELCOME / QR (classroom only) ============ -->', briefing + '  <!-- ============ 0 · WELCOME / QR (classroom only) ============ -->', 1)
 
 # ---- 6. facilitator styles ----
 FAC_CSS = '''

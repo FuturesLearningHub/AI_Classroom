@@ -1,88 +1,70 @@
 # Facilitation Guide — AI Basics
 
-Every activity carries a learner-visible **"Why this matters"** line — the reason
-is on the slide, not just in these notes. The learner experience is fully
-facilitatable: every teaching section has
-(1) a **simulator or play moment**, (2) a **labeled, timed activity** — *As a
-group* or *On your own* — and (3) a **validation point** that tells you whether
-learning landed before you move on.
+Every activity carries a learner-visible **"Why this matters"** line, and
+every teaching section has (1) an **interactive tool or play moment**,
+(2) a **labeled, timed activity** — *As a group* (classroom edition) or
+*On your own* (both editions) — and (3) a **validation point**.
 
-The full per-section runbook lives in
-[`facilitator/notes.json`](facilitator/notes.json) and follows the **ATD
-facilitator-guide framework**: each section carries a verbatim **Say** script,
-**Do** choreography, an **Ask** with anticipated learner responses and how to
-respond, a **Debrief** line, and a scripted **Transition** into the next
-section — plus session-level front matter (materials list, week-before /
-day-before / 30-minutes-before prep checklists, if/then contingencies, and a
-tough-questions bank). A first-time facilitator should be able to deliver the
-class from the guide alone.
+The full runbook lives in [`facilitator/notes.json`](facilitator/notes.json)
+on the **ATD facilitator-guide framework**: per section a verbatim **Say**
+script, **Do** choreography, an **Ask** with anticipated responses, a
+**Debrief** line, and a scripted **Transition**, plus front matter
+(materials, prep checklists, contingencies, tough questions, and
+copy-paste templates: pre-work invite, 7-day pulse, AI 201 graduation note).
 
-The **facilitator edition is live at `/facilitator/`** — the learner deck with
-those notes rendered in a rail to the right of each slide, opening with a
-Facilitator Briefing slide (prep, materials, contingencies, tough questions).
-Its welcome-slide QR encodes the learner URL. Regenerate after any change to
-`index.html` or `facilitator/notes.json`:
+**Audience:** absolute beginners — people who have never opened an AI
+tool, or tried once and gave up. The register is the method: no jargon,
+no assumptions, no question too basic. **Pre-work:** bring one
+words-shaped chore from a normal week.
+
+The **facilitator edition is live at `/facilitator/`**, and the
+**self-paced web edition at `/web/`** — regenerate both after any change
+to `index.html` (facilitator also after `notes.json`):
 
 ```bash
 python3 tools/build-facilitator.py
+python3 tools/build-web.py
 ```
 
 ## Run of show — two paths
 
-Component times are built bottom-up and include in-block transitions. Pick the
-path that matches your slot; never promise 60 and run the full design.
-
-| Slide | Full (91 min) | Core (60 min) |
+| Slide | Full (60 min) | Core (30 min) |
 |---|---|---|
 | Welcome / QR | 3 | 2 |
-| Objectives | 2 | 1 |
-| Agenda | 1 | — |
-| 01 What AI is | 7 | 4 |
-| 02 How machines learn | 8 | 4 |
-| 03 Neural networks | 6 | 4 |
-| 04 Language models | 6 | 5 |
-| 05 Temperature | 4 | 2 |
-| 06 Prompting | 8 | 5 |
-| Prompt Lab | 7 | 5 |
-| 07 Strengths & limits | 6 | 4 |
-| 08 Responsible use | 7 | 4 |
-| Your toolkit | 6 | 5 |
-| 09 Wellbeing | 5 | 3 |
-| Recap quiz | 4 | 4 |
-| My AI plan (capstone) | 7 | 6 |
-| Glossary | 1 | — |
-| Closing | 3 | 2 |
-| **Total** | **91** | **60** |
+| What you'll get | 2 | 1 |
+| The plan | 1 | — |
+| 01 What is AI? | 8 | 4 |
+| Manifesto | 1 | — |
+| 02 Why & how | 8 | 4 |
+| 03 When & when not | 9 | 5 |
+| 04 What it can do | 8 | 4 |
+| 05 Your first try | 10 | 6 |
+| Recap quiz | 4 | 2 |
+| My First Try (capstone) | 4 | 1 |
+| Closing / commitment | 2 | 1 |
+| **Total** | **60** | **30** |
 
-**Core-path rules:** every simulator, every knowledge check, the Lab, and the
-capstone stay. Run ONE group activity of your choice; the rest become
-follow-ups. Skip the agenda, glossary, and in-class videos. Per-section cut
-notes live in `facilitator/notes.json` (`coreNote`).
+**Core-path rules (the lunch-and-learn):** every trainer stays as a fast
+room vote, the live demo shrinks to one exchange, group rounds become one
+voice each — but the prompt builder and the commitment card run at full
+length. They ARE the outcome. Per-section cuts live in each `coreNote`.
 
-**Timing discipline:** the Lab and capstone stretch in talkative rooms. Protect
-the last 15 minutes (recap, capstone, close) by cutting group debriefs first,
-never the capstone.
+**Timing discipline:** Idea 05 (the builder and in-room first try) is the
+conversion moment — protect its 10 minutes by trimming debriefs anywhere
+else. Never cut the traffic-light trainer or the prompt builder.
 
 ## Validation model
 
-- **In the moment:** inline quick checks (sections 01, 03, 05, 07, 08), the ML
-  trainer score (02), and activity outputs (vendor questions, policy
-  sentences, task/check/owner assignments).
-- **End of session:** the 6-question scored recap maps 1:1 to the learning
-  objectives, plus verbal transfer commitments at close.
-- **Deliberately not validated:** the Section 09 wellbeing self-check is
-  private by design — facilitators must not collect it.
-
-## The facilitator edition (live)
-
-- Mirror of the learner site at `/facilitator/`, generated by
-  `tools/build-facilitator.py` — never hand-edit `facilitator/index.html`.
-- Each slide carries a right-hand rail rendered from `facilitator/notes.json`:
-  minutes (Full/Core), purpose, then the ATD blocks — Say, Do, Ask (with
-  Expect / Respond), Debrief, Validate, Watch for, and the Transition script.
-- A **Facilitator Briefing** slide opens the deck: prep checklists, materials,
-  contingency table, and tough-questions accordion.
-- Simulators are identical — the facilitator drives the same interactions on
-  the projector while learners follow on their devices.
-- The learner deck stays untouched; its own QR self-encodes, while the
-  facilitator edition's QR is pinned to the learner URL.
+- **In the moment:** trainer scores (01, 02, 03, 04), the inline check
+  (03), the live demo's before/after (02), and the assembled, copied
+  prompt on every screen (05).
+- **End of session:** the 5-question recap maps to the five ideas
+  (Level 2); the closing fist-to-five is the Level 1 check; the My First
+  Try card and the chore-and-day commitment round are the transfer
+  artifacts.
+- **After:** the 7-day pulse (did the first try run, did the follow-up
+  trick work) is the Level 3 evidence — **the count of completed first
+  tries is the program's headline metric**, because this course exists to
+  convert non-users into users. Confident finishers get routed to AI 201.
+- **Consistency guard:** the traffic light must always match AI 201's
+  green/yellow/red rules; the two courses cite each other.

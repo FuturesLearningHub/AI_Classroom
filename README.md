@@ -1,154 +1,84 @@
-# AI Basics — A Classroom Introduction
+# AI Basics — A First Introduction for People Who Have Never Used AI
 
-An interactive, single-page teaching site that introduces the fundamentals of
-artificial intelligence to **Vanderbilt staff**. Built as a
-**facilitation tool**: project it in class while learners scan a QR code to
-follow along on their own devices, or share the link for self-paced review.
+The absolute-beginner course of the Vanderbilt Learning Series: what AI
+is, why and how to use it, when to use it and when not to, what it can do
+for you, and your first try — built live in the session. No jargon, no
+code, no prerequisites. A **Learning on Demand** program: project it and
+learners scan a QR code, or share the self-paced web edition.
 
-It wears the **Vanderbilt "Futures Learning Hub" (FLH)** visual system — black &
-gold, Libre Caslon / Inter / Antonio, one-idea-per-screen pacing — re-purposed
-from a marketing layout into a lesson.
+Catalog: [Course Library](https://me5231979.github.io/Course_Library/) ·
+Sequel: [AI 201: Beyond the Basics](https://me5231979.github.io/AI-Advanced/)
 
----
+- **Classroom edition:** https://me5231979.github.io/AI_Classroom/
+- **Self-paced web edition:** https://me5231979.github.io/AI_Classroom/web/
+- **Facilitator edition:** https://me5231979.github.io/AI_Classroom/facilitator/
+
+**Skills:** Embodies an entrepreneurial spirit and leverages data and
+technology (VU competency) · Artificial Intelligence · Digital
+Fluency/Information Literacy · Data Security
 
 ## Running it
 
-It's plain HTML/CSS/JS with no build step.
+Plain HTML/CSS/JS, no build step:
 
 ```bash
-# any static server works, e.g.
 python3 -m http.server 8000
-# then open http://localhost:8000
 ```
 
-Opening `index.html` directly also works, but a server is recommended so the
-Google Fonts load cleanly.
+## What it teaches (5 ideas)
 
-## Session flow
+1. **What is AI?** — one plain sentence (a program that learned from
+   examples), and proof you've been using it for years
+2. **Why & how do we use it?** — ask in plain English, look, improve with
+   one follow-up
+3. **When to use it — and when not to** — the traffic light: green
+   (public), yellow (internal → approved VU tools only), red (private
+   info about people → never), plus check-what-matters
+4. **What can it do for you?** — five superpowers: draft, summarize,
+   brainstorm, explain, rewrite
+5. **Your first try** — build a real prompt (job + details + shape),
+   copy it, run it this week
 
-1. **Welcome slide** — shown on the projector as people arrive. It renders a
-   **QR code automatically** from the page's own URL, so learners scan and
-   launch the experience on their devices. (No regeneration needed when you
-   deploy; to hard-code a different target, set
-   `data-url="https://your-url"` on the `#qrCard` div in `index.html`.)
-   When previewing from a local `file://` open, a placeholder appears instead.
-2. **Hero** — headline, four **learning objectives**, and a **Higgsfield-generated
-   3-clip montage** (staff at AI workstations → campus walk with tablets →
-   lab wall-screen review) cycling ~15s per clip, streamed from the CDN with
-   duotone + scrim applied by CSS. Clip URLs live in the hero `<video>`'s
-   `data-playlist` attribute; a failed clip is skipped, and if all fail the
-   gold particle canvas takes over.
-3. Sections 01–09 — each is one projected **slide**, with a **"Go deeper"**
-   expander underneath holding the content layer: practical workplace framing
-   plus a labeled, timed activity — **As a group** (discussion with clear
-   steps) or **On your own** (individual practice/reflection).
-4. Scored recap quiz, flip-card glossary (reference), then a closing with ONE
-   next step: Dr. Jules White's Coursera course, featured as the single
-   call to action. Teaching videos are embedded in-flow (Sections 02 and 04);
-   deeper links live inside the relevant "Go deeper" panels.
+Ends with a 5-question recap, the **My First Try** commitment card, and a
+close that points at AI 201. `cheatsheet.html` is the one-page take-home;
+`worksheet.html` is the printable first-try card.
 
-## The facilitator edition
-
-A second build lives at **/facilitator/** — the same experience with a
-facilitator-notes rail on the right of every slide (purpose, Full/Core
-timing, step-by-step choreography, validation, watch-fors, and the 60-minute
-cut). Its welcome-slide QR encodes the **learner** URL, so projecting the
-facilitator edition lets the room scan straight into the clean learner site.
-Regenerate after editing `index.html` or `facilitator/notes.json`:
-
-```bash
-python3 tools/build-facilitator.py
-```
-
-## Presenting in class
-
-The page is a scrollable site **and** a keyboard-driven deck.
-
-| Control | Action |
-|---|---|
-| `→` / `Space` / `Page Down` | Next slide |
-| `←` / `Shift+Space` / `Page Up` | Previous slide |
-| `Home` / `End` | First / last slide |
-| Dot rail (right edge) | Jump to any slide |
-| Bottom pill | Prev / next + slide counter |
-
-A gold progress bar across the top tracks position. Each slide is a full
-viewport "one idea," with a slide number and dark/light rhythm (opens and closes
-dark) for pacing.
-
-## The interactive teaching tools
+## The interactive tools
 
 | Slide | Tool | What learners do |
 |---|---|---|
-| What AI Is | **Nested rings** | Tap AI → ML → Deep Learning → Gen AI to see how the terms nest |
-| Neural Networks | **Activatable network** | Press *Run* and watch a signal propagate layer by layer |
-| Language Models | **Next-token predictor** | Build a sentence by picking from probability-ranked words |
-| Randomness | **Temperature slider** | Drag from *Precise* to *Creative* and watch an answer rewrite itself |
-| Prompting | **Prompt anatomy** | Hover/tap Role · Context · Task · Format to see each part in a real prompt |
-| Strengths & Limits | **Knowledge check** | One-question check with instant feedback |
-| Responsibility | **Knowledge check** | Privacy/ethics check with instant feedback |
-| Recap | **Scored quiz** | 5 questions, live scoring, retry |
-| Glossary | **Flip cards** | Flip 12 key terms to reveal definitions |
+| What is AI | **Is that AI?** | Call five everyday things: learned-from-examples, or regular program |
+| Why & how | **Pick the next move** | Choose the right follow-up when an answer is stiff, long, generic, wrong, or good |
+| When not to | **Green, yellow, or red?** | Call the color on five real situations before anything gets pasted |
+| What it can do | **Match the superpower** | Match five chores to draft/summarize/brainstorm/explain/rewrite |
+| First try | **Prompt builder** | Assemble a real, copyable prompt: job + details + shape |
+| Recap | **Scored quiz** | 5 questions mapped to the five ideas |
+| Capstone | **My First Try card** | One chore, one superpower, one day — built and copied |
 
-All interactions are keyboard-accessible, have visible focus states, use
-`aria-live` for dynamic content, and honor `prefers-reduced-motion`.
+## Instructional design
 
-## Content (8 sections)
+- **Bloom's (beginner band):** Identify/Recognize → Apply (the follow-up,
+  the color call) → Create (the built prompt and dated commitment).
+- **Kirkpatrick:** L1 fist-to-five at close; L2 trainer scores + recap;
+  L3 first-try card + 7-day pulse — the count of completed first tries is
+  the program's headline metric.
+- **Adult learning:** every exercise runs on a real chore the learner
+  brings; the capstone is a first try scheduled within days, not a
+  concept.
 
-1. What AI actually is — AI / ML / Deep Learning / Gen AI
-2. How machines learn — supervised, unsupervised, reinforcement
-3. Inside a neural network — layers, neurons, weights
-4. Language models — tokens and next-word prediction
-5. Steering the output — temperature and randomness
-6. Prompting well — the four parts of a strong prompt
-7. Strengths & limits — capabilities, failure modes, hallucination
-8. Using AI responsibly — bias, privacy, accountability at work
-9. Keeping the time AI saves — workload creep, wellbeing, EAP resources
-   (grounded in the HBR intensification research, mirroring the FLH learn site)
+## Three editions
 
-To edit copy, open `index.html` — each `<section class="slide">` is one screen.
-Quiz questions live in `assets/js/main.js` (the `QUESTIONS` array for the recap;
-`data-correct` / `data-why` attributes for inline checks).
+- **Classroom** — QR welcome, group activities, facilitator-led.
+- **Web (self-paced)** — generated by `python3 tools/build-web.py`: same
+  course minus the QR slide and all "As a group" prompts.
+- **Facilitator** — generated by `python3 tools/build-facilitator.py`
+  from `facilitator/notes.json`: ATD-scripted rails (Say / Do / Ask /
+  Debrief / Transition), briefing slide, Full 60 / Core 30 paths.
 
----
+Regenerate both after editing `index.html`.
 
-## Design system (FLH)
+## Publish
 
-- **Color:** `--vu-black #1C1C1C`, `--vu-white`, flat gold `--vu-gold-flat #CFAE70`,
-  and the metallic hero gradient (`#FEEEB6 → #CFAE70 → #B49248`), used once or
-  twice per page only. Neutrals: cream `#F5F3EF`, sand, grays. Saturated hues
-  (`#ECB748`, `#946E24`, `#B3C9CD`, `#8BA18E`) are reserved for the interactive
-  diagrams. All tokens live at the top of `assets/css/styles.css`.
-- **Type:** Libre Caslon Display (headlines, one italic word each), Inter (body/UI),
-  Antonio (all-caps eyebrows). Fallbacks: Times New Roman / Arial / Impact.
-- **Motion:** everything ≤ 400ms, ease-out, reveal-once, reduced-motion aware.
-
-## Logos
-
-The four official Vanderbilt EPS masters were converted to web-ready **RGB
-transparent PNGs** (auto-trimmed and optimized) and live in `assets/img/`:
-
-| File | Source EPS | Used on |
-|---|---|---|
-| `vu-lockup-white.png` | `Dimensional_V_White_Lockup_cmyk.eps` | Footer |
-| `vu-lockup-black.png` | `Dimensional_V_Black_Lockup_cmyk.eps` | (available for light nav) |
-| `vu-centered-white.png` | `VU_Centered_White_cmyk.eps` | Closing slide |
-| `vu-centered-black.png` | `VU_Centered_Black_cmyk.eps` | (available for light closings) |
-| `vu-v-icon.png` | cropped from the lockup | Nav mark |
-| `favicon.svg` / `favicon-96.png` | derived | Browser tab |
-
-The Vanderbilt wordmark is present in the footer, satisfying the FLH
-sub-brand lockup requirement. Marks are for authorized use only — no
-recoloring, stretching, or effects beyond the approved metallic treatment.
-
-## Notes / limitations
-
-- The QR library is `qrcode-generator` (MIT, Kazuhiko Arase), vendored at
-  `assets/js/qrcode.js` — no network needed to render the code.
-- **Fonts are self-hosted** in `assets/fonts/` (woff2, ~170 KB total, via the
-  Fontsource builds of the Google families) — the deck renders identically
-  with no internet in the classroom.
-- The next-token probabilities and temperature samples are **illustrative**, not
-  live model output — they're teaching aids.
-- No frameworks and no network-dependent JS — one CSS file, one JS file, plus
-  the vendored QR encoder. Easy Lighthouse scores, works offline.
+```bash
+git push origin main && git branch -f gh-pages main && git push -f origin gh-pages
+```

@@ -684,3 +684,71 @@ em, .italic { font-style: italic; }
   .slide { min-height: auto; page-break-after: always; padding: 2rem 0; }
   body { background: #fff; color: #000; }
 }
+
+/* ---------- 22. Radical Candor quadrant (Difficult Conversations) ---------- */
+.quad { margin-top: 2.25rem; display: grid; gap: .6rem; max-width: 860px; }
+.quad__grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.quad__cell { border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius); padding: 1.1rem 1.2rem;
+  background: rgba(255,255,255,.04); }
+.quad__cell h4 { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em;
+  font-size: .9rem; margin: 0 0 .45rem; color: rgba(255,255,255,.85); }
+.quad__cell p { margin: 0; font-size: .92rem; line-height: 1.5; color: rgba(255,255,255,.65); }
+.quad__cell--good { border-color: var(--vu-gold-flat); background: rgba(207,174,112,.12); }
+.quad__cell--good h4 { color: var(--vu-gold-flat); }
+.quad__axis { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .08em;
+  font-size: .78rem; color: rgba(255,255,255,.5); }
+.quad__axis--x { text-align: right; }
+@media (max-width: 640px) { .quad__grid { grid-template-columns: 1fr; } }
+
+/* ---------- 23. BRAVING scorecard (Difficult Conversations) ---------- */
+.braving { margin-top: 2rem; display: grid; gap: .55rem; }
+.braving__row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1rem; align-items: center;
+  border: 1px solid var(--line, #E4E4E4); border-radius: var(--radius); padding: .8rem 1rem; background: #fff; }
+.braving__label b { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em;
+  font-size: .88rem; color: var(--vu-oak); }
+.braving__label p { margin: .2rem 0 0; font-size: .9rem; line-height: 1.45; color: var(--ink-soft, #555); }
+.braving__scale { display: flex; gap: .35rem; }
+.braving__dot { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #cfcac0; background: #fff;
+  font: 600 .85rem/1 var(--font-sans); color: #8a8478; cursor: pointer; transition: all .18s var(--ease); }
+.braving__dot:hover { border-color: var(--vu-gold-flat); color: var(--vu-oak); }
+.braving__dot.on { background: var(--vu-gold-flat); border-color: var(--vu-gold-flat); color: var(--vu-black); }
+.braving__dot:focus-visible { outline: 2px solid var(--vu-oak); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .braving__row { grid-template-columns: 1fr; }
+  .braving__scale { justify-content: flex-start; }
+}
+
+/* ---------- 24. GROW simulator (Coaching for Performance) ---------- */
+.growsim__coachee { margin: 1rem 0 1.1rem; background: #fff; border: 1px solid var(--line, #E4E4E4);
+  border-left: 3px solid var(--vu-gold-flat); border-radius: var(--radius); padding: 1rem 1.2rem;
+  font-family: var(--font-serif); font-size: 1.08rem; line-height: 1.5; color: #333; }
+.growsim__coachee b { font-family: var(--font-condensed); font-style: normal; text-transform: uppercase;
+  letter-spacing: .06em; font-size: .8rem; color: var(--vu-oak); margin-right: .4rem; }
+
+/* ---------- 25. Context window simulator (AI 201) ---------- */
+.ctxsim { margin-top: 2.25rem; max-width: 860px; }
+.ctxsim__stack { display: grid; gap: .4rem; margin: 1rem 0 1.25rem; }
+.ctxsim__msg { border: 1px solid var(--line, #E4E4E4); border-left: 3px solid var(--vu-gold-flat);
+  border-radius: 4px; padding: .5rem .8rem; font-size: .88rem; background: #fff;
+  transition: opacity .35s var(--ease), filter .35s var(--ease); }
+.ctxsim__msg--ai { border-left-color: #B3C9CD; background: #fafaf8; }
+.ctxsim__msg b { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .06em;
+  font-size: .72rem; color: var(--vu-oak); margin-right: .35rem; }
+.ctxsim__msg.out { opacity: .25; filter: grayscale(1); border-left-color: #cfcac0; position: relative; }
+.ctxsim__msg.out::after { content: 'outside the window'; float: right; font-family: var(--font-condensed);
+  text-transform: uppercase; letter-spacing: .07em; font-size: .66rem; color: #a09880; }
+.ctxsim__q { margin: 0 0 .5rem; font-size: .95rem; }
+.ctxsim .temp__readout { font-size: clamp(1.05rem, 2vw, 1.3rem); }
+
+/* ---------- 26. RAG simulator (AI 201) ---------- */
+.ragsim { margin-top: 2.25rem; max-width: 860px; }
+.ragsim__q { margin: 0 0 1rem; font-size: 1rem; color: rgba(255,255,255,.9); }
+.ragsim__toggle { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.ragsim__toggle .opt { flex: 1 1 200px; justify-content: center; }
+.ragsim__toggle .opt[aria-pressed="true"] { border-color: var(--vu-gold-flat); background: rgba(207,174,112,.16); }
+.ragsim__answer { font-size: .98rem; line-height: 1.55; color: rgba(255,255,255,.88); }
+.ragsim__answer p { font-family: var(--font-serif); font-size: 1.08rem; }
+.ragsim__source { margin-top: 1rem; border: 1px dashed rgba(139,161,142,.6); border-radius: 4px;
+  padding: .75rem .9rem; font-size: .85rem; color: rgba(255,255,255,.75); background: rgba(139,161,142,.08); }
+.ragsim__source b { color: #8BA18E; font-family: var(--font-condensed); text-transform: uppercase;
+  letter-spacing: .06em; font-size: .72rem; }
