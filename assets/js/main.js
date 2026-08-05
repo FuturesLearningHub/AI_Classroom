@@ -574,10 +574,13 @@
     i = Math.max(0, Math.min(slides.length - 1, i));
     slides[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
   }
+  var barTitle = $('#barTitle');
   function setActive(i) {
     current = i;
     dots.forEach(function (d, di) { d.setAttribute('aria-current', String(di === i)); });
     if (counter) counter.textContent = (i + 1) + ' / ' + slides.length;
+    if (barTitle) barTitle.textContent = slides[i].getAttribute('data-title') || '';
+    checkHint();
     $$('.nav__links a').forEach(function (a) {
       var href = a.getAttribute('href');
       a.setAttribute('aria-current', String(href === '#' + slides[i].id));
@@ -613,6 +616,25 @@
     } else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
     else if (e.key === 'End') { e.preventDefault(); goTo(slides.length - 1); }
   });
+
+  // "scroll for more" indicator: shows when the active screen has more below the fold
+  var hint = $('#scrollHint');
+  function checkHint() {
+    if (!hint || !slides[current]) return;
+    var s = slides[current];
+    var need = s.scrollHeight - s.clientHeight > 56;
+    var atEnd = s.scrollTop + s.clientHeight >= s.scrollHeight - 24;
+    hint.classList.toggle('show', need && !atEnd);
+  }
+  if (hint) {
+    hint.addEventListener('click', function () {
+      var s = slides[current];
+      s.scrollBy({ top: s.clientHeight * 0.7, behavior: reduce ? 'auto' : 'smooth' });
+    });
+    slides.forEach(function (s) { s.addEventListener('scroll', checkHint, { passive: true }); });
+    window.addEventListener('resize', checkHint);
+    setTimeout(checkHint, 400);
+  }
 
   // in-page anchor links (nav, buttons) jump the horizontal deck
   $$('a[href^="#"]').forEach(function (a) {

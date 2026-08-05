@@ -23,7 +23,7 @@
 <link rel="preload" href="assets/fonts/libre-caslon-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=10">
+<link rel="stylesheet" href="assets/css/styles.css?v=12">
 <style>
   /* skill pills (course-level) */
   .skills { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: 1.5rem; }
@@ -61,13 +61,17 @@
   </nav>
 </header>
 
-<!-- deck dot rail + control bar -->
-<div class="dots" id="dots" role="navigation" aria-label="Slide navigation"></div>
-<div class="deckbar" role="group" aria-label="Presentation controls">
-  <button id="deckPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
-  <span class="deckbar__count" id="deckCount">1 / 13</span>
-  <button id="deckNext" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+<!-- bottom navigation bar -->
+<div class="bottombar" role="group" aria-label="Presentation controls">
+  <span class="bottombar__title" id="barTitle">Welcome</span>
+  <div class="dots" id="dots" role="navigation" aria-label="Slide navigation"></div>
+  <div class="bottombar__ctrl">
+    <span class="bottombar__count" id="deckCount">1 / 18</span>
+    <button id="deckPrev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <button id="deckNext" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
 </div>
+<button class="scrollhint" id="scrollHint" type="button" aria-label="Scroll for more on this screen">Scroll for more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
 
 <main class="deck" id="top">
 
@@ -147,20 +151,9 @@
     <div class="wrap">
       <p class="eyebrow" data-reveal>Idea 01 · What is AI?</p>
       <h2 class="h2" data-reveal>One sentence, <em>no jargon</em>.</h2>
-      <p class="lead" data-reveal>AI is a computer program that learned from millions of examples. Because it learned instead of following fixed rules, it can predict, suggest, and write things that fit your situation. It isn't a robot or magic, and it isn't always right either. Think of it as a very well-read assistant: fast, tireless, eager to help, and occasionally wrong in a confident voice.</p>
+      <p class="lead" data-reveal>AI is a computer program that learned from millions of examples. Because it learned instead of following fixed rules, it can predict, suggest, and write things that fit your situation. It isn't a robot or magic, and it isn't always right either.</p>
 
-      <div class="quiz" id="isAI" data-reveal style="margin-top:2.5rem">
-        <p class="eyebrow" style="margin-bottom:.5rem">Play · Is that AI?</p>
-        <p class="why" style="margin-top:0"><b>Why this matters:</b> the fastest way to make AI feel less mysterious is to notice you've already been using it for years. Here are five everyday things. Call each one.</p>
-        <p class="quiz__progress" id="iaProgress"></p>
-        <p class="quiz__q" id="iaQ" style="margin-top:.4rem"></p>
-        <div class="quiz__options" id="iaOptions" role="group" aria-label="Choices"></div>
-        <p class="quiz__feedback" id="iaFeedback" aria-live="polite"></p>
-        <div class="quiz__nav">
-          <button class="btn btn--dark" id="iaNext" style="visibility:hidden">Next one</button>
-        </div>
-        <div id="iaResult" hidden aria-live="polite"></div>
-      </div>
+
 
       <div class="yt" data-reveal data-embed="https://www.youtube-nocookie.com/embed/Ok-xpKjKp2g" data-yttitle="How AI works, a plain-language introduction">
         <button class="yt__load" type="button">
@@ -175,7 +168,7 @@
       <details class="deeper" data-reveal>
         <summary><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg> Go deeper</summary>
         <div class="deeper__body">
-          <div><h4>In practice</h4><p>The one distinction worth keeping: a regular program follows rules a person wrote, which is why a calculator never surprises you. AI learned patterns from examples, which is why your phone's word suggestions surprise you daily. The chat tools everyone is talking about, like Microsoft Copilot or ChatGPT, are that same word-suggestion idea trained on so much text that it can draft emails, summarize documents, and explain almost anything. Once you see that, most of the mystery is gone.</p></div>
+          <div><h4>In practice</h4><p>Think of AI as a very well-read assistant: fast, tireless, eager to help, and occasionally wrong in a confident voice. The distinction worth keeping: a regular program follows rules a person wrote, which is why a calculator never surprises you. AI learned patterns from examples, which is why your phone's word suggestions surprise you daily. The chat tools everyone is talking about, like Microsoft Copilot or ChatGPT, are that same word-suggestion idea trained on so much text that it can draft emails, summarize documents, and explain almost anything. Once you see that, most of the mystery is gone.</p></div>
           <div class="deeper__ask" data-classroom><h4><span class="mode">As a group</span> · 3 min</h4>
           <p class="why"><b>Why this matters:</b> hearing the room name AI they already use dissolves the intimidation faster than any definition.</p>
           <ol class="steps">
@@ -190,6 +183,25 @@
           </ol></div>
         </div>
       </details>
+    </div>
+  </section>
+
+  <section class="slide on-light slide--play" id="s-what-play" data-title="Idea 01 · Play">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Idea 01 · Play</p>
+      <h2 class="h3" data-reveal style="font-family:var(--font-serif);font-weight:400;font-size:clamp(1.5rem,2.8vw,2.1rem);margin-bottom:1rem">Is that AI? Call all five.</h2>
+      <div class="quiz" id="isAI" data-reveal style="margin-top:2.5rem">
+        <p class="eyebrow" style="margin-bottom:.5rem">Play · Is that AI?</p>
+        <p class="why" style="margin-top:0"><b>Why this matters:</b> the fastest way to make AI feel less mysterious is to notice you've already been using it for years. Here are five everyday things. Call each one.</p>
+        <p class="quiz__progress" id="iaProgress"></p>
+        <p class="quiz__q" id="iaQ" style="margin-top:.4rem"></p>
+        <div class="quiz__options" id="iaOptions" role="group" aria-label="Choices"></div>
+        <p class="quiz__feedback" id="iaFeedback" aria-live="polite"></p>
+        <div class="quiz__nav">
+          <button class="btn btn--dark" id="iaNext" style="visibility:hidden">Next one</button>
+        </div>
+        <div id="iaResult" hidden aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
@@ -226,18 +238,7 @@
         </div>
       </div>
 
-      <div class="quiz" id="followUp" data-reveal style="margin-top:2.5rem">
-        <p class="eyebrow" style="margin-bottom:.5rem">Play · Pick the next move</p>
-        <p class="why" style="margin-top:0"><b>Why this matters:</b> the difference between people who love AI and people who gave up after one try is what they did with the SECOND message. Five moments. Pick the move for each.</p>
-        <p class="quiz__progress" id="fuProgress"></p>
-        <p class="quiz__q" id="fuQ" style="margin-top:.4rem"></p>
-        <div class="quiz__options" id="fuOptions" role="group" aria-label="Next move choices"></div>
-        <p class="quiz__feedback" id="fuFeedback" aria-live="polite"></p>
-        <div class="quiz__nav">
-          <button class="btn" id="fuNext" style="visibility:hidden">Next moment</button>
-        </div>
-        <div id="fuResult" hidden aria-live="polite"></div>
-      </div>
+
 
       <details class="deeper" data-reveal>
         <summary><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg> Go deeper</summary>
@@ -259,6 +260,25 @@
           </ol></div>
         </div>
       </details>
+    </div>
+  </section>
+
+  <section class="slide on-dark slide--play" id="s-how-play" data-title="Idea 02 · Play">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Idea 02 · Play</p>
+      <h2 class="h3" data-reveal style="font-family:var(--font-serif);font-weight:400;font-size:clamp(1.5rem,2.8vw,2.1rem);margin-bottom:1rem">Pick the next move.</h2>
+      <div class="quiz" id="followUp" data-reveal style="margin-top:2.5rem">
+        <p class="eyebrow" style="margin-bottom:.5rem">Play · Pick the next move</p>
+        <p class="why" style="margin-top:0"><b>Why this matters:</b> the difference between people who love AI and people who gave up after one try is what they did with the SECOND message. Five moments. Pick the move for each.</p>
+        <p class="quiz__progress" id="fuProgress"></p>
+        <p class="quiz__q" id="fuQ" style="margin-top:.4rem"></p>
+        <div class="quiz__options" id="fuOptions" role="group" aria-label="Next move choices"></div>
+        <p class="quiz__feedback" id="fuFeedback" aria-live="polite"></p>
+        <div class="quiz__nav">
+          <button class="btn" id="fuNext" style="visibility:hidden">Next moment</button>
+        </div>
+        <div id="fuResult" hidden aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
@@ -287,28 +307,9 @@
         </div>
       </div>
 
-      <div class="quiz" id="lightJudge" data-reveal style="margin-top:2.5rem">
-        <p class="eyebrow" style="margin-bottom:.5rem">Play · Green, yellow, or red?</p>
-        <p class="why" style="margin-top:0"><b>Why this matters:</b> this one habit prevents nearly every AI mistake that makes the news. Five real situations. Call the color on each.</p>
-        <p class="quiz__progress" id="ljProgress"></p>
-        <p class="quiz__q" id="ljQ" style="margin-top:.4rem"></p>
-        <div class="quiz__options" id="ljOptions" role="group" aria-label="Color choices"></div>
-        <p class="quiz__feedback" id="ljFeedback" aria-live="polite"></p>
-        <div class="quiz__nav">
-          <button class="btn btn--dark" id="ljNext" style="visibility:hidden">Next situation</button>
-        </div>
-        <div id="ljResult" hidden aria-live="polite"></div>
-      </div>
 
-      <div class="quiz" data-quiz data-reveal style="margin-top:2.5rem">
-        <p class="quiz__q">Quick check: besides privacy, what's the other big "don't" with AI?</p>
-        <div class="quiz__options">
-          <button class="opt" data-correct="1" data-why="AI sounds equally confident when it's right and when it's wrong. Facts, dates, numbers, and names get checked at the source before you rely on them."><span class="mark">A</span><span>Don't trust important facts without checking them</span></button>
-          <button class="opt" data-correct="0" data-why="Long questions are fine. Detail usually makes answers better, not worse."><span class="mark">B</span><span>Don't ask it long questions</span></button>
-          <button class="opt" data-correct="0" data-why="Daily use is fine and normal. The habit that matters is checking what matters."><span class="mark">C</span><span>Don't use it more than once a day</span></button>
-        </div>
-        <p class="quiz__feedback" aria-live="polite"></p>
-      </div>
+
+
 
       <details class="deeper" data-reveal>
         <summary><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg> Go deeper</summary>
@@ -332,6 +333,25 @@
     </div>
   </section>
 
+  <section class="slide on-cream slide--play" id="s-when-play" data-title="Idea 03 · Play">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Idea 03 · Play</p>
+      <h2 class="h3" data-reveal style="font-family:var(--font-serif);font-weight:400;font-size:clamp(1.5rem,2.8vw,2.1rem);margin-bottom:1rem">Green, yellow, or red?</h2>
+      <div class="quiz" id="lightJudge" data-reveal style="margin-top:2.5rem">
+        <p class="eyebrow" style="margin-bottom:.5rem">Play · Green, yellow, or red?</p>
+        <p class="why" style="margin-top:0"><b>Why this matters:</b> this one habit prevents nearly every AI mistake that makes the news. Five real situations. Call the color on each.</p>
+        <p class="quiz__progress" id="ljProgress"></p>
+        <p class="quiz__q" id="ljQ" style="margin-top:.4rem"></p>
+        <div class="quiz__options" id="ljOptions" role="group" aria-label="Color choices"></div>
+        <p class="quiz__feedback" id="ljFeedback" aria-live="polite"></p>
+        <div class="quiz__nav">
+          <button class="btn btn--dark" id="ljNext" style="visibility:hidden">Next situation</button>
+        </div>
+        <div id="ljResult" hidden aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ 7 · 04 WHAT IT CAN DO ============ -->
   <section class="slide on-dark" id="s-cando" data-count data-title="What it can do">
     <div class="wrap">
@@ -339,18 +359,7 @@
       <h2 class="h2" data-reveal>Five superpowers, <em>zero code</em>.</h2>
       <p class="lead" data-reveal>You don't need a list of a hundred uses. You need five, and you'll recognize the chores they eat: <b>Draft it</b> (first versions of anything), <b>Summarize it</b> (long thing → short thing), <b>Brainstorm it</b> (ten ideas in ten seconds), <b>Explain it</b> (jargon → plain English), and <b>Rewrite it</b> (same facts, different tone or length).</p>
 
-      <div class="quiz" id="superPower" data-reveal style="margin-top:2.5rem">
-        <p class="eyebrow" style="margin-bottom:.5rem">Play · Match the superpower</p>
-        <p class="why" style="margin-top:0"><b>Why this matters:</b> once you can match the chore to the superpower, you'll start seeing AI-shaped chores everywhere. Five real situations. Pick the power for each.</p>
-        <p class="quiz__progress" id="spProgress"></p>
-        <p class="quiz__q" id="spQ" style="margin-top:.4rem"></p>
-        <div class="quiz__options" id="spOptions" role="group" aria-label="Superpower choices"></div>
-        <p class="quiz__feedback" id="spFeedback" aria-live="polite"></p>
-        <div class="quiz__nav">
-          <button class="btn" id="spNext" style="visibility:hidden">Next chore</button>
-        </div>
-        <div id="spResult" hidden aria-live="polite"></div>
-      </div>
+
 
       <div class="card" data-reveal style="margin-top:2rem;border-color:rgba(236,183,72,.4)">
         <span class="tag">What it can't do</span>
@@ -379,55 +388,58 @@
     </div>
   </section>
 
+  <section class="slide on-dark slide--play" id="s-cando-play" data-title="Idea 04 · Play">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Idea 04 · Play</p>
+      <h2 class="h3" data-reveal style="font-family:var(--font-serif);font-weight:400;font-size:clamp(1.5rem,2.8vw,2.1rem);margin-bottom:1rem">Match the chore to the superpower.</h2>
+      <div class="quiz" id="superPower" data-reveal style="margin-top:2.5rem">
+        <p class="eyebrow" style="margin-bottom:.5rem">Play · Match the superpower</p>
+        <p class="why" style="margin-top:0"><b>Why this matters:</b> once you can match the chore to the superpower, you'll start seeing AI-shaped chores everywhere. Five real situations. Pick the power for each.</p>
+        <p class="quiz__progress" id="spProgress"></p>
+        <p class="quiz__q" id="spQ" style="margin-top:.4rem"></p>
+        <div class="quiz__options" id="spOptions" role="group" aria-label="Superpower choices"></div>
+        <p class="quiz__feedback" id="spFeedback" aria-live="polite"></p>
+        <div class="quiz__nav">
+          <button class="btn" id="spNext" style="visibility:hidden">Next chore</button>
+        </div>
+        <div id="spResult" hidden aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ 8 · THE IMPACT ============ -->
   <section class="slide on-cream" id="s-impact" data-count data-title="The impact">
     <div class="wrap">
       <p class="eyebrow" data-reveal>The bigger picture · Why this is worth learning</p>
       <h2 class="h2" data-reveal>This is already changing <em>real lives</em>.</h2>
-      <p class="lead" data-reveal>The time savings are real. In a <a href="https://www.stlouisfed.org/on-the-economy/2025/feb/impact-generative-ai-work-productivity" target="_blank" rel="noopener">2024 Federal Reserve Bank of St. Louis survey</a>, workers who use these tools reported saving about 2.2 hours in a 40-hour week. But the numbers aren't the best part. The same technology behind your first email draft is quietly doing some remarkable good in the world.</p>
+      <p class="lead" data-reveal>Workers who use these tools save about 2.2 hours a week, per a <a href="https://www.stlouisfed.org/on-the-economy/2025/feb/impact-generative-ai-work-productivity" target="_blank" rel="noopener">2024 Federal Reserve survey</a>. And the same technology behind your first email draft is doing some remarkable good in the world.</p>
 
       <div class="grid grid-3" style="margin-top:2.5rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
         <div class="card" data-reveal>
           <span class="tag">Health</span>
           <h3>Finding cancer earlier</h3>
-          <p class="muted">In a Swedish trial of over 105,000 women, published in <a href="https://www.thelancet.com/journals/landig/article/PIIS2589-7500(24)00267-X/fulltext" target="_blank" rel="noopener">The Lancet Digital Health</a>, AI-supported mammography screening found 29% more cancers and cut radiologists' screen-reading workload by 44%. Doctors still make every call; the AI helps them look.</p>
+          <p class="muted">In a Swedish trial of 105,000 women (<a href="https://www.thelancet.com/journals/landig/article/PIIS2589-7500(24)00267-X/fulltext" target="_blank" rel="noopener">The Lancet Digital Health</a>), AI-supported screening found 29% more cancers and cut scan-reading workload 44%. Doctors made every call.</p>
         </div>
         <div class="card" data-reveal>
           <span class="tag">Accessibility</span>
           <h3>Describing the world for blind users</h3>
-          <p class="muted"><a href="https://www.bemyeyes.com/news/introducing-be-my-ai-formerly-virtual-volunteer-for-people-who-are-blind-or-have-low-vision-powered-by-openais-gpt-4/" target="_blank" rel="noopener">Be My Eyes</a> lets a blind person photograph anything (a menu, a medicine label, the fridge) and hear a detailed description in seconds. The demo below is worth two minutes of anyone's day.</p>
+          <p class="muted"><a href="https://www.bemyeyes.com/news/introducing-be-my-ai-formerly-virtual-volunteer-for-people-who-are-blind-or-have-low-vision-powered-by-openais-gpt-4/" target="_blank" rel="noopener">Be My Eyes</a> lets a blind person photograph anything (a menu, a label, the fridge) and hear what it says in seconds. The demo is on the next screen.</p>
         </div>
         <div class="card" data-reveal>
           <span class="tag">Voice</span>
           <h3>Giving voices back</h3>
-          <p class="muted">People losing their speech to ALS can now bank recordings of their own voice, and AI rebuilds it so they keep speaking as themselves. <a href="https://bridgingvoice.org/news/elevenlabs-bridging-voice-partnership/" target="_blank" rel="noopener">Bridging Voice and ElevenLabs</a> provide this free to ALS patients.</p>
+          <p class="muted">People losing speech to ALS bank recordings, and AI rebuilds their voice so they keep speaking as themselves. Free through <a href="https://bridgingvoice.org/news/elevenlabs-bridging-voice-partnership/" target="_blank" rel="noopener">Bridging Voice and ElevenLabs</a>.</p>
         </div>
         <div class="card" data-reveal>
           <span class="tag">Communication</span>
           <h3>A drafting partner for autistic adults</h3>
-          <p class="muted">Researchers <a href="https://arxiv.org/html/2601.17946v1" target="_blank" rel="noopener">studying autistic professionals</a> found many use AI chat tools to draft messages, soften tone, and decode workplace phrasing. In one participant's words, "I use ChatGPT to humanize my words."</p>
+          <p class="muted">Researchers <a href="https://arxiv.org/html/2601.17946v1" target="_blank" rel="noopener">studying autistic professionals</a> found many use AI to draft messages and decode workplace phrasing. One participant: "I use ChatGPT to humanize my words."</p>
         </div>
       </div>
 
-      <div class="yt" data-reveal data-embed="https://www.youtube-nocookie.com/embed/DaKb2L8Xqkw" data-yttitle="Be My Eyes: AI describing the world for blind users">
-        <button class="yt__load" type="button">
-          <span class="yt__play" aria-hidden="true">▶</span>
-          <span class="yt__title">Watch: AI describes the world for a blind user (2 min)</span>
-          <span class="yt__src">Be My Eyes · Loads YouTube on click</span>
-        </button>
-        <p class="yt__alt">Prefer a new tab? <a href="https://www.youtube.com/watch?v=DaKb2L8Xqkw" target="_blank" rel="noopener">Open on YouTube</a>.</p>
-        <p class="why" style="margin:.35rem 0 0"><b>Why this video:</b> two minutes that turn "AI" from a headline into a person reading a menu on their own for the first time in years.</p>
-      </div>
 
-      <div class="quiz" data-quiz data-reveal style="margin-top:2.5rem">
-        <p class="quiz__q">Quick check: in the breast cancer screening trial, what was the AI's job?</p>
-        <div class="quiz__options">
-          <button class="opt" data-correct="1" data-why="The AI flagged scans for the doctors and took over repetitive screen reading. Humans made every diagnosis. That pattern, AI does the chore and people keep the judgment, is the same one you'll use at your desk."><span class="mark">A</span><span>Help the doctors look, while doctors made every call</span></button>
-          <button class="opt" data-correct="0" data-why="No. Radiologists stayed in charge of every diagnosis. The AI reduced their repetitive reading workload so their attention went where it mattered."><span class="mark">B</span><span>Replace the radiologists</span></button>
-          <button class="opt" data-correct="0" data-why="It did far more than paperwork: it helped find 29% more cancers. But every decision stayed with the doctors."><span class="mark">C</span><span>Only schedule the appointments</span></button>
-        </div>
-        <p class="quiz__feedback" aria-live="polite"></p>
-      </div>
+
+
 
       <details class="deeper" data-reveal>
         <summary><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg> Go deeper</summary>
@@ -448,6 +460,31 @@
           </ol></div>
         </div>
       </details>
+    </div>
+  </section>
+
+  <section class="slide on-cream slide--play" id="s-impact-video" data-title="The impact · Watch">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>The impact · Watch</p>
+      <h2 class="h3" data-reveal style="font-family:var(--font-serif);font-weight:400;font-size:clamp(1.5rem,2.8vw,2.1rem);margin-bottom:1rem">Two minutes that make it real.</h2>
+      <div class="yt" data-reveal style="max-width:720px" data-embed="https://www.youtube-nocookie.com/embed/DaKb2L8Xqkw" data-yttitle="Be My Eyes: AI describing the world for blind users">
+        <button class="yt__load" type="button">
+          <span class="yt__play" aria-hidden="true">▶</span>
+          <span class="yt__title">Watch: AI describes the world for a blind user (2 min)</span>
+          <span class="yt__src">Be My Eyes · Loads YouTube on click</span>
+        </button>
+        <p class="yt__alt">Prefer a new tab? <a href="https://www.youtube.com/watch?v=DaKb2L8Xqkw" target="_blank" rel="noopener">Open on YouTube</a>.</p>
+        <p class="why" style="margin:.35rem 0 0"><b>Why this video:</b> two minutes that turn "AI" from a headline into a person reading a menu on their own for the first time in years.</p>
+      </div>
+      <div class="quiz" data-quiz data-reveal style="margin-top:1.5rem">
+        <p class="quiz__q">Quick check: in the breast cancer screening trial, what was the AI's job?</p>
+        <div class="quiz__options">
+          <button class="opt" data-correct="1" data-why="The AI flagged scans for the doctors and took over repetitive screen reading. Humans made every diagnosis. That pattern, AI does the chore and people keep the judgment, is the same one you'll use at your desk."><span class="mark">A</span><span>Help doctors look; doctors made every call</span></button>
+          <button class="opt" data-correct="0" data-why="No. Radiologists made every diagnosis. The AI took the repetitive reading so their attention went where it mattered."><span class="mark">B</span><span>Replace the radiologists</span></button>
+          <button class="opt" data-correct="0" data-why="It helped find 29% more cancers. Every decision stayed with the doctors."><span class="mark">C</span><span>Only schedule the appointments</span></button>
+        </div>
+        <p class="quiz__feedback" aria-live="polite"></p>
+      </div>
     </div>
   </section>
 
@@ -636,6 +673,6 @@
 
 
 <script src="assets/js/qrcode.js?v=1"></script>
-<script src="assets/js/main.js?v=10"></script>
+<script src="assets/js/main.js?v=12"></script>
 </body>
 </html>
