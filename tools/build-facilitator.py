@@ -24,7 +24,7 @@ s = s.replace('href="worksheet.html"', 'href="../worksheet.html"')
 
 # ---- 2. head: title, noindex, no canonical/og confusion ----
 s = s.replace('<title>AI Basics | Vanderbilt</title>',
-              '<title>AI Basics — Facilitator Edition | Vanderbilt</title>')
+              '<title>AI Basics: Facilitator Edition | Vanderbilt</title>')
 s = re.sub(r'<link rel="canonical"[^>]*>\n', '', s)
 s = s.replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"')
 

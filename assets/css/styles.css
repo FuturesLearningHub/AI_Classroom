@@ -752,3 +752,40 @@ em, .italic { font-style: italic; }
   padding: .75rem .9rem; font-size: .85rem; color: rgba(255,255,255,.75); background: rgba(139,161,142,.08); }
 .ragsim__source b { color: #8BA18E; font-family: var(--font-condensed); text-transform: uppercase;
   letter-spacing: .06em; font-size: .72rem; }
+
+/* ============ horizontal deck (advance left to right) ============ */
+html, body { height: 100%; }
+body { overflow: hidden; }
+.deck {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  height: 100vh;
+  height: 100dvh;
+  scrollbar-width: none;
+}
+.deck::-webkit-scrollbar { display: none; }
+.slide {
+  flex: 0 0 100vw;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  justify-content: flex-start;
+}
+/* center short slides vertically, let tall ones scroll from the top */
+.slide > .wrap { margin-top: auto; margin-bottom: auto; }
+@media (prefers-reduced-motion: no-preference) { .deck { scroll-behavior: smooth; } }
+/* dots move to a bottom-center horizontal rail, matching the left-right flow */
+.dots { right: auto; top: auto; transform: none; left: 50%; bottom: 22px;
+  transform: translateX(-50%); flex-direction: row; }
+@media (max-width: 900px) { .dots { display: none; } }
+/* footer now lives inside the closing slide */
+.slide .footer { margin-top: clamp(2.5rem, 6vh, 5rem); }

@@ -1,5 +1,5 @@
 /* =====================================================================
-   AI BASICS — classroom deck
+   AI BASICS, classroom deck
    interactions (vanilla JS, no dependencies)
    ===================================================================== */
 (function () {
@@ -39,10 +39,11 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
     revEls.forEach(function (el) { revObs.observe(el); });
     // elements already on screen at load can sit inside the observer's
-    // excluded margin — reveal them directly
+    // excluded margin; reveal them directly
     requestAnimationFrame(function () {
       revEls.forEach(function (el) {
-        if (el.getBoundingClientRect().top < window.innerHeight) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.left < window.innerWidth && r.right > 0) {
           el.classList.add('in'); revObs.unobserve(el);
         }
       });
@@ -280,7 +281,7 @@
         answer: 1, why: 'Generic answers usually mean a generic question. The more it knows about your situation, the better the answer gets.' },
       { q: 'It gave you a date for a campus event that doesn\'t sound right. Next move?',
         opts: ['Trust it, computers don\'t make mistakes', 'Check the real calendar before repeating it', 'Ask the AI if it\'s sure'],
-        answer: 1, why: 'AI can be confidently wrong: it sounds certain even when guessing. Anything important — dates, numbers, names — gets checked at the source. (Asking "are you sure?" isn\'t checking.)' },
+        answer: 1, why: 'AI can be confidently wrong: it sounds certain even when guessing. Anything important (dates, numbers, names) gets checked at the source. Asking "are you sure?" is not checking.' },
       { q: 'The first answer is honestly... pretty good. Next move?',
         opts: ['Perfect means done, copy and send', 'Read it once with your own eyes, fix what only you would know, then use it', 'Ask for ten more versions just in case'],
         answer: 1, why: 'AI writes the draft; you stay the editor. Your name goes on it, so your eyes go over it. That partnership is the whole model.' }
@@ -302,7 +303,7 @@
       { q: 'Pasting a draft of an internal team announcement so AI can tidy it up.',
         answer: 1, why: 'Yellow. Internal work content belongs only in Vanderbilt-approved tools (like Copilot signed in with your VU account), never a random free website.' },
       { q: 'Pasting a student\'s name, grades, and situation to ask for advice.',
-        answer: 2, why: 'Red. Private information about real people — students, patients, employees — never goes into an AI tool. Describe the situation with no names and no identifying details, or don\'t use AI for it.' },
+        answer: 2, why: 'Red. Private information about real people, whether students, patients, or employees, never goes into an AI tool. Describe the situation with no names and no identifying details, or skip AI for this one.' },
       { q: 'Asking for ten icebreaker ideas for a staff meeting.',
         answer: 0, why: 'Green. Generic and harmless: exactly the kind of chore AI eats for breakfast.' },
       { q: 'Pasting a colleague\'s performance review to "make it sound better."',
@@ -316,7 +317,7 @@
     progress: '#spProgress', next: '#spNext', result: '#spResult',
     progressWord: 'Chore', goodColor: 'var(--vu-gold-flat)',
     resultColor: 'rgba(255,255,255,.85)', passAt: 4,
-    passMsg: 'Five superpowers, and you can now spot which chore each one eats. One of these is your first task — next slide.',
+    passMsg: 'Five superpowers, and you can now spot which chore each one eats. One of these becomes your first task, two slides from here.',
     failMsg: 'The five to remember: Draft it (first versions), Summarize it (long → short), Brainstorm it (ideas fast), Explain it (jargon → plain), Rewrite it (same words, different tone).',
     labels: ['Draft it', 'Summarize it', 'Brainstorm it', 'Explain it', 'Rewrite it'],
     items: [
@@ -427,11 +428,11 @@
       });
     });
     var POWER = {
-      draft: 'Draft it — ask for a first version, then make it yours',
-      summarize: 'Summarize it — paste the long thing (yellow rule: approved tool), ask for the short version',
-      brainstorm: 'Brainstorm it — ask for 10 ideas, keep the two good ones',
-      explain: 'Explain it — ask for plain English, no jargon',
-      rewrite: 'Rewrite it — same facts, better tone or length'
+      draft: 'Draft it. Ask for a first version, then make it yours',
+      summarize: 'Summarize it. Paste the long thing (yellow rule: approved tool) and ask for the short version',
+      brainstorm: 'Brainstorm it. Ask for 10 ideas and keep the two good ones',
+      explain: 'Explain it. Ask for plain English with no jargon',
+      rewrite: 'Rewrite it. Same facts, better tone or length'
     };
     var WHEN = { today: 'today, before the day ends', tomorrow: 'tomorrow morning, first thing', week: 'this week, on a day you pick right now' };
     buildBtn.addEventListener('click', function () {
@@ -472,7 +473,7 @@
     var QUESTIONS = [
       { q: 'In one sentence: what is AI?',
         opts: ['A robot that thinks like a human', 'A computer program that learned from millions of examples, so it can predict and generate useful answers', 'A search engine with better manners', 'Magic'],
-        correct: 1, why: 'Learned from examples is the key. That\'s why it\'s so capable — and why it can still be confidently wrong.' },
+        correct: 1, why: 'Learned from examples is the key. It explains why it\'s so capable, and why it can still be confidently wrong.' },
       { q: 'How do you use an AI chat tool?',
         opts: ['You need to learn some code first', 'Type what you need in plain English, like texting a capable assistant, then refine', 'Fill out a special form', 'Speak only in keywords'],
         correct: 1, why: 'Plain English, full sentences, details welcome. Then the two-step: add what it was missing and ask again.' },
@@ -530,7 +531,7 @@
       var pct = Math.round((score / QUESTIONS.length) * 100);
       var msg = pct >= 80 ? 'You\'re ready. Your first try is waiting on the next slide.' :
                 pct >= 50 ? 'Solid. Skim the section you missed, then go do your first try.' :
-                            'Worth one more pass through the deck — it\'s short — then try again.';
+                            'Worth one more pass through the deck (it\'s short), then try again.';
       resultEl.innerHTML = '<span class="eyebrow">Your result</span>' +
         '<div class="quiz__score gold-text">' + score + ' / ' + QUESTIONS.length + '</div>' +
         '<p class="lead" style="margin-top:1rem">' + msg + '</p>' +
@@ -571,7 +572,7 @@
 
   function goTo(i) {
     i = Math.max(0, Math.min(slides.length - 1, i));
-    slides[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    slides[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
   }
   function setActive(i) {
     current = i;
@@ -592,11 +593,15 @@
   }
   setActive(0);
 
-  // progress bar
-  window.addEventListener('scroll', function () {
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    if (bar) bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
-  }, { passive: true });
+  // progress bar follows the deck's horizontal position
+  var deckEl = $('.deck');
+  if (deckEl) {
+    deckEl.addEventListener('scroll', function () {
+      var w = deckEl.scrollWidth - deckEl.clientWidth;
+      if (bar) bar.style.width = (w > 0 ? (deckEl.scrollLeft / w) * 100 : 0) + '%';
+      nav.classList.toggle('scrolled', deckEl.scrollLeft > 40);
+    }, { passive: true });
+  }
 
   // keyboard
   document.addEventListener('keydown', function (e) {
@@ -607,6 +612,24 @@
       e.preventDefault(); goTo(current - 1);
     } else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
     else if (e.key === 'End') { e.preventDefault(); goTo(slides.length - 1); }
+  });
+
+  // in-page anchor links (nav, buttons) jump the horizontal deck
+  $$('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      var slide = target.closest ? (target.closest('.slide') || target) : target;
+      if (slides.indexOf(slide) > -1) {
+        e.preventDefault();
+        goTo(slides.indexOf(slide));
+      } else if (id === 'top') {
+        e.preventDefault();
+        goTo(0);
+      }
+    });
   });
 
   // deck bar buttons
