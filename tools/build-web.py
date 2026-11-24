@@ -25,10 +25,10 @@ s = s.replace('<li><a href="web/" data-classroom>Self-paced web version</a></li>
 # ---- 3. head: title, canonical, descriptions ----
 s = s.replace('<title>AI Basics | Vanderbilt</title>',
               '<title>AI Basics: Self-Paced | Vanderbilt</title>')
-s = s.replace('href="https://me5231979.github.io/AI_Classroom/"',
-              'href="https://me5231979.github.io/AI_Classroom/web/"')
-s = s.replace('content="https://me5231979.github.io/AI_Classroom/"',
-              'content="https://me5231979.github.io/AI_Classroom/web/"')
+s = s.replace('href="https://futureslearninghub.github.io/AI_Classroom/"',
+              'href="https://futureslearninghub.github.io/AI_Classroom/web/"')
+s = s.replace('content="https://futureslearninghub.github.io/AI_Classroom/"',
+              'content="https://futureslearninghub.github.io/AI_Classroom/web/"')
 
 # ---- 4. asset + link paths (one directory deeper) ----
 s = s.replace('href="assets/', 'href="../assets/')

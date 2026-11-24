@@ -6,12 +6,12 @@ for you, and your first try — built live in the session. No jargon, no
 code, no prerequisites. A **Learning on Demand** program: project it and
 learners scan a QR code, or share the self-paced web edition.
 
-Catalog: [Course Library](https://me5231979.github.io/Course_Library/) ·
-Sequel: [AI 201: Beyond the Basics](https://me5231979.github.io/AI-Advanced/)
+Catalog: [Course Library](https://flh-learning-library.vercel.app/) ·
+Sequel: [AI 201: Beyond the Basics](https://futureslearninghub.github.io/AI-Advanced/)
 
-- **Classroom edition:** https://me5231979.github.io/AI_Classroom/
-- **Self-paced web edition:** https://me5231979.github.io/AI_Classroom/web/
-- **Facilitator edition:** https://me5231979.github.io/AI_Classroom/facilitator/
+- **Classroom edition:** https://futureslearninghub.github.io/AI_Classroom/
+- **Self-paced web edition:** https://futureslearninghub.github.io/AI_Classroom/web/
+- **Facilitator edition:** https://futureslearninghub.github.io/AI_Classroom/facilitator/
 
 **Skills:** Embodies an entrepreneurial spirit and leverages data and
 technology (VU competency) · Artificial Intelligence · Digital
