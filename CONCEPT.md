@@ -31,5 +31,5 @@ to teach in person or over Zoom, whenever a team needs one.
 
 The first course is **AI Basics** for Vanderbilt staff.
 
-- Class version: https://me5231979.github.io/AI_Classroom/
-- Teacher version: https://me5231979.github.io/AI_Classroom/facilitator/
+- Class version: https://futureslearninghub.github.io/AI_Classroom/
+- Teacher version: https://futureslearninghub.github.io/AI_Classroom/facilitator/

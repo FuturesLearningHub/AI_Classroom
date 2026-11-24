@@ -2,10 +2,10 @@
 
 Single-page interactive classroom experience (Learning on Demand), pared
 to a true absolute-beginner course. Live at
-https://me5231979.github.io/AI_Classroom/ (GitHub Pages, served from the
+https://futureslearninghub.github.io/AI_Classroom/ (GitHub Pages, served from the
 `gh-pages` branch — publish with `git branch -f gh-pages main && git push -f origin gh-pages`).
 
-Sequel: AI-Advanced (AI 201). Catalog: me5231979/Course_Library.
+Sequel: AI-Advanced (AI 201). Catalog: FuturesLearningHub/FLH-Learning-Library-.
 Same engine and standing principles as the sister courses.
 
 ## Three editions, two generated
